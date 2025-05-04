@@ -1,0 +1,72 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - game
+
+  auth:
+    build: ./backend/auth
+    volumes:
+      - ./backend/auth/src:/app/src
+    ports:
+      - "4000:4000"
+    environment:
+      - SERVICE_NAME=auth
+
+  game:
+    build: ./backend/game
+    volumes:
+      - ./backend/game/src:/app/src
+    ports:
+      - "4001:4001"
+    environment:
+      - SERVICE_NAME=game
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - auth
+      - game
+
+  logstash:
+    build: ./elk/logstash
+    volumes:
+      - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"  # TCP input
+    depends_on:
+      - auth
+      - game
+
+  kibana:
+    image: kibana:8.11.1
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
