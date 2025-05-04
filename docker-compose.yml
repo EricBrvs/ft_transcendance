@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   frontend:
     build: ./frontend
@@ -14,7 +12,7 @@ services:
   auth:
     build: ./backend/auth
     volumes:
-      - ./backend/auth/src:/app/src
+      - ./backend/auth:/app
     ports:
       - "4000:4000"
     environment:
@@ -23,7 +21,7 @@ services:
   game:
     build: ./backend/game
     volumes:
-      - ./backend/game/src:/app/src
+      - ./backend/game:/app
     ports:
       - "4001:4001"
     environment:
