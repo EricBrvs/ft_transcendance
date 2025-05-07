@@ -1,0 +1,12 @@
+{
+    "name": "gateway",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+      "fastify": "^4.25.1",
+      "@fastify/http-proxy": "^11.1.2",
+      "@fastify/jwt": "^9.1.0",
+      "dotenv": "^16.5.0"
+    }
+  }
+  

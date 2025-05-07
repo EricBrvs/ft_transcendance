@@ -7,8 +7,6 @@ RUN npm install
 
 COPY . .
 
-RUN mkdir -p ./data
-
-EXPOSE 9000
+EXPOSE 9443
 
 CMD ["node", "index.js"]
