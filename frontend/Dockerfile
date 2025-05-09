@@ -1,10 +1,22 @@
-FROM node:18
+FROM node:22-alpine AS builder
 
 WORKDIR /app
+    
+COPY Ft_transcendence/package.json Ft_transcendence/package-lock.json ./
 
-COPY package*.json ./
-RUN npm install
+RUN npm ci
+    
+COPY Ft_transcendence/ .
 
-COPY . .
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+FROM nginx:stable-alpine
+    
+COPY --from=builder /app/dist /usr/share/nginx/html
+    
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+    
+EXPOSE 80
+    
+CMD ["nginx", "-g", "daemon off;"]
+    

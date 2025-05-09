@@ -1,0 +1,38 @@
+{
+	"menu": {
+		"home": "Accueil",
+		"profile": "Profil",
+		"game": "Jeu",
+		"logout": "Déconnexion"
+	},
+	"home": {
+		"welcom": "Bienvenue sur",
+		"your": "Ton",
+		"profile": "profil",
+		"lastGame": "Dernière partie:",
+		"lose": "Perdu",
+		"win": "Gagné",
+		"newGame": "Nouvelle partie",
+		"ai": "VS IA",
+		"player": "VS joueur",
+		"start": "Lancer",
+		"history": "Historique",
+		"gameSettings": "Paramètres de jeu",
+		"custom": "Personnaliser"
+	},
+	"profile": {
+		"account": "Compte",
+		"logout": "Déconnexion",
+		"delete": "Supprimer",
+		"settings": "Paramètres",
+		"pseudo": "Pseudo",
+		"edit_pseudo": "Modifier le pseudo",
+		"email": "Email",
+		"password": "Mot de passe",
+		"changePassword": "Changer le mot de passe",
+		"language": "Langue"
+	},
+	"game": {
+		"gameCustom": "Jeu personnalisé"
+	}
+}
