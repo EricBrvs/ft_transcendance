@@ -4,20 +4,19 @@ services:
     build: ./backend/gateway
     image: gateway
     ports:
-      - "8443:443"
+      - "9443:443"
     depends_on:
       - auth
       # - user
       # - dashboard
-    environment:
-      - NODE_ENV=production
     restart: always
   auth:
     container_name: auth
     image: auth
     build: ./backend/auth
-    # volumes:
-    #   - ./auth-service:/app 
+    volumes:
+      - ./backend/auth:/app
+      - /app/node_modules  
     restart: always
 
   user:
