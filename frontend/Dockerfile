@@ -2,11 +2,11 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
     
-COPY Ft_transcendence/package.json Ft_transcendence/package-lock.json ./
+COPY src/package.json src/package-lock.json ./
 
 RUN npm ci
     
-COPY Ft_transcendence/ .
+COPY src/ .
 
 RUN npm run build
 
