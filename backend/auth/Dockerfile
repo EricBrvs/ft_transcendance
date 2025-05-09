@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install
 #DEV/DEBUG COMMAND \/ NEED TO DELETE IT
 RUN npm install -g nodemon
-RUN apt update && apt install -y curl
+RUN apt update && apt install -y curl sqlite3
 #END DEV/DEBUG COMMAND
 
 
