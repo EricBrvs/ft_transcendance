@@ -40,8 +40,9 @@ services:
     build: ./elk/logstash
     volumes:
       - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs/auth:/var/log/app
     ports:
-      - "5044:5044"  # TCP input
+      - "5044:5044"
     depends_on:
       - auth
       - game
@@ -57,10 +58,17 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-    environment:
-      - discovery.type=single-node
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./elk/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment: # ca c'est pas specialement necessaire, a voir
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
 
   prometheus:
     image: prom/prometheus
@@ -68,3 +76,5 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+volumes:
+  esdata:
