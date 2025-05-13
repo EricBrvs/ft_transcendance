@@ -1,9 +1,47 @@
 {
+	"accessibility": {
+		"title": "Accessibilité",
+		"text_size": "Taille du texte",
+		"small": "Petit",
+		"normal": "Normal",
+		"large": "Grand",
+		"previewText": "Aperçu du texte",
+		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée"
+	},
+	"auth": {
+		"login": {
+			"title": "Connexion",
+			"email": "Email",
+			"password": "Mot de passe",
+			"loginButton": "Se connecter",
+			"noAccount": "Vous n'avez pas de compte ?",
+			"googleLogin": "Se connecter avec Google",
+			"emailError": "Veuillez entrer une adresse email valide"
+		},
+		"signup": {
+			"title": "Inscription",
+			"email": "Email",
+			"password": "Mot de passe",
+			"confirmPassword": "Confirmer le mot de passe",
+			"signupButton": "S'inscrire",
+			"haveAccount": "Vous avez déjà un compte ?",
+			"googleSignup": "S'inscrire avec Google",
+			"emailError": "Veuillez entrer une adresse email valide",
+			"passwordRequirements": "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un caractère spécial, et un chiffre",
+			"passwordError": "Le mot de passe doit contenir {0}",
+			"passwordErrorUppercase": "une majuscule",
+			"passwordErrorSpecial": "un caractère spécial",
+			"passwordErrorNumber": "un chiffre",
+			"passwordErrorLength": "au moins 8 caractères",
+			"passwordsNotMatch": "Les mots de passe ne correspondent pas"
+		}
+	},
 	"menu": {
 		"home": "Accueil",
 		"profile": "Profil",
 		"game": "Jeu",
-		"logout": "Déconnexion"
+		"logout": "Déconnexion",
+		"test_text_size": "Test Taille Texte"
 	},
 	"home": {
 		"welcom": "Bienvenue sur",
@@ -30,9 +68,37 @@
 		"email": "Email",
 		"password": "Mot de passe",
 		"changePassword": "Changer le mot de passe",
-		"language": "Langue"
+		"language": "Langue",
+		"accessibility": "Accessibilité",
+		"previewText": "Aperçu du texte",
+		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée"
 	},
 	"game": {
 		"gameCustom": "Jeu personnalisé"
+	},
+	"pong": {
+		"startGame": "Commencer la partie",
+		"resumeGame": "Reprendre la partie",
+		"quitGame": "Quitter le jeu",
+		"backToMenu": "Retour au menu",
+		"changeView": "Changer de vue",
+		"view": "Vue",
+		"score": "Score",
+		"pause": "Pause",
+		"youWin": "a gagné !",
+		"youLose": "a perdu !",
+		"player1": "Joueur 1",
+		"player2": "Joueur 2",
+		"viewFront": "Face",
+		"viewTop": "Dessus",
+		"viewSide": "Côté",
+		"gameOverTitle": "Fin de partie",
+		"gameOverMessage": "Score final",
+		"keyboardControls": "Commandes: W/S et Flèches pour bouger | F: Plein écran | P: Pause",
+		"mobileControls": "Commandes tactiles: Utilisez les flèches en bas de l'écran | Bouton central pour mettre en pause",
+		"editViewMode": "Mode Édition Vue Activé (V pour désactiver)",
+		"up": "Haut",
+		"down": "Bas"
 	}
 }
+
