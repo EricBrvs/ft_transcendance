@@ -8,7 +8,7 @@ import { open } from 'sqlite'
 dotenv.config()
 
 const db = await open({
-  filename: process.env.AUTH_DB_PATH || './data/gateway.db',
+  filename: process.env.GATEWAY_DB_PATH || './data/gateway.db',
   driver: sqlite3.Database
 })
 

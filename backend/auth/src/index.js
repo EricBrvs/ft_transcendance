@@ -73,17 +73,18 @@ fastify.register(fastifyOauth2, {
     },
     auth: fastifyOauth2.GOOGLE_CONFIGURATION
   },
-  startRedirectPath: '/auth/google/login',
+  startRedirectPath: '/google/login',
   callbackUri: 'http://localhost:9443/auth/google/callback'
 })
 
-fastify.get('/auth/google/callback', async (req, reply) => {
+fastify.get('/google/callback', async (req, reply) => {
   const { token } = await fastify.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req)
   const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: { Authorization: `Bearer ${token.access_token}` }
   })
-  const { id: google_id, email, name } = await res.json()
   let debug_info = await res.json()
+  const { id: google_id, email, name, picture } = debug_info
+
 
   const local = await db.get('SELECT password FROM users WHERE email = ?', [email])
   if (local && local.password) {
@@ -96,14 +97,14 @@ fastify.get('/auth/google/callback', async (req, reply) => {
   if (!user) {
     const uuid = crypto.randomUUID();
     await db.run(
-      'INSERT INTO users (uuid, email, google_id, name) VALUES (?, ?, ?, ?)',
-      [uuid, email, google_id, name]
+      'INSERT INTO users (uuid, email, google_id, name, avatar, last_seen) VALUES (?, ?, ?, ?, ?, ?)',
+      [uuid, email, google_id, name, picture, Date.now()]
     )
     user = await db.get('SELECT * FROM users WHERE email = ?', [email])
   }
 
   const localToken = fastify.jwt.sign({ uuid: user.uuid, email: user.email })
-  reply.send({ token: localToken, debug: debug_info  })
+  reply.send({ token: localToken })
 })
 
 // DEBUG ENDPOINT FOR MIDDLEWARE CHECK
