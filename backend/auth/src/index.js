@@ -6,7 +6,7 @@ import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import dotenv from 'dotenv'
 import fastifyOauth2 from '@fastify/oauth2'
-const crypto = require("crypto");
+import crypto from 'crypto';
 
 
 dotenv.config()

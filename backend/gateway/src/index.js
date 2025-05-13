@@ -1,6 +1,9 @@
 import Fastify from 'fastify'
 import fastifyHttpProxy from '@fastify/http-proxy'
+import jwt from '@fastify/jwt'
 import dotenv from 'dotenv'
+import sqlite3 from 'sqlite3'
+import { open } from 'sqlite'
 
 dotenv.config()
 
@@ -25,22 +28,8 @@ await fastify.register(jwt, {
 await fastify.register(fastifyHttpProxy, {
   upstream: process.env.AUTH_URL || 'http://auth:9000',
   prefix: '/auth',               
-  rewritePrefix: '/auth',        
+  rewritePrefix: '',        
   http2: false
-})
-
-fastify.get('/', async () => ({ gateway: 'OK' }))
-
-fastify.get('/me', async (req, reply) => {
-  const auth = req.headers.authorization
-  if (!auth) return reply.code(401).send({ error: 'No token' })
-
-  const res = await fetch(`${process.env.AUTH_URL}/me`, {
-    headers: { Authorization: auth }
-  })
-
-  const json = await res.json()
-  reply.code(res.status).send(json)
 })
 
 fastify.addHook('onRequest', async (req, reply) => {
@@ -63,7 +52,6 @@ fastify.addHook('onResponse', async (req, reply) => {
   }
 })
 
-
 fastify.decorate("authenticate", async (request, reply) => {
   try {
     const authHeader = request.headers.authorization
@@ -76,5 +64,19 @@ fastify.decorate("authenticate", async (request, reply) => {
     reply.code(401).send({ error: 'Unauthorized' })
   }
 })
+
+fastify.get('/', async () => ({ gateway: 'OK' }))
+
+fastify.get('/me', async (req, reply) => {
+  const auth = req.headers.authorization
+  const res = await fetch(`${process.env.AUTH_URL}/me`, {
+    headers: { Authorization: auth }
+  })
+
+  const json = await res.json()
+  reply.code(res.status).send(json)
+})
+
+
 
 fastify.listen({ port: 443, host: '0.0.0.0' })
