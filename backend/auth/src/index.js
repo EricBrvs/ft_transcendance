@@ -109,7 +109,8 @@ fastify.get('/google/callback', async (req, reply) => {
 
 // DEBUG ENDPOINT FOR MIDDLEWARE CHECK
 fastify.get('/me', async (req, reply) => {
-  const user = await db.get('SELECT uuid, email, last_seen FROM users WHERE uuid = ?', [req.user.uuid])
+  const user = await db.get('SELECT uuid, email, last_seen FROM users WHERE uuid = ?', [req.query.uuid])
+  console.log(user);
   reply.send({ user })
 })
 
@@ -121,14 +122,25 @@ fastify.post('/logout', async (req, reply) => {
 })
 
 fastify.post('/internal/lastseen', async (req, reply) => {
-  const last = await db.get('SELECT last_seen FROM users WHERE uuid = ?', [req.user.uuid])
-if (!last || Date.now() - last.last_seen > 10000) {
-  await db.run('UPDATE users SET last_seen = ? WHERE uuid = ?', [Date.now(), req.user.uuid])
-}
+  try {
+    const auth = req.headers.authorization
+    const token = auth?.split(' ')[1]
+    if (!token) throw new Error('No token')
 
+    const payload = await fastify.jwt.verify(token)
+    const uuid = payload.uuid
+    if (!uuid) throw new Error('Missing uuid in token')
 
+    const last = await db.get('SELECT last_seen FROM users WHERE uuid = ?', [uuid])
+    if (!last || Date.now() - last.last_seen > 10000) {
+      await db.run('UPDATE users SET last_seen = ? WHERE uuid = ?', [Date.now(), uuid])
+    }
 
-  reply.send({ ok: true })
+    reply.send({ ok: true })
+  } catch (err) {
+    reply.code(401).send({ error: 'Unauthorized' })
+  }
 })
+
 
 fastify.listen({ port: 9000, host: '0.0.0.0' })
