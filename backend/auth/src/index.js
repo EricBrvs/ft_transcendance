@@ -28,8 +28,8 @@ await db.exec(`
     uuid TEXT UNIQUE,
     email TEXT UNIQUE,
     password TEXT,
+    username TEXT UNIQUE,
     google_id TEXT,
-    name TEXT,
     avatar TEXT,
     last_seen INTEGER
   )
@@ -40,10 +40,13 @@ fastify.post('/register', async (req, reply) => {
   const hash = await bcrypt.hash(password, 10)
   const uuid = crypto.randomUUID();
   try {
-    await db.run('INSERT INTO users (uuid, email, password) VALUES (?, ?, ?)', [uuid, email, hash])
+    const localPart = email.split('@')[0].toLowerCase().trim();
+    const username = localPart.replace(/[^a-z0-9]/g, '');
+    await db.run('INSERT INTO users (uuid, email, password, username) VALUES (?, ?, ?, ?)', [uuid, email, hash, username])
     reply.send({ status: 'registered', uuid: uuid })
   } catch (err) {
     reply.code(400).send({ error: 'Email already used' })
+
   }
 })
 
@@ -82,8 +85,7 @@ fastify.get('/google/callback', async (req, reply) => {
   const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: { Authorization: `Bearer ${token.access_token}` }
   })
-  let debug_info = await res.json()
-  const { id: google_id, email, name, picture } = debug_info
+  const { id: google_id, email, picture } = await res.json()
 
 
   const local = await db.get('SELECT password FROM users WHERE email = ?', [email])
@@ -96,9 +98,11 @@ fastify.get('/google/callback', async (req, reply) => {
   let user = await db.get('SELECT * FROM users WHERE email = ?', [email])
   if (!user) {
     const uuid = crypto.randomUUID();
+    const localPart = email.split('@')[0].toLowerCase().trim();
+    const username = localPart.replace(/[^a-z0-9]/g, '');
     await db.run(
-      'INSERT INTO users (uuid, email, google_id, name, avatar, last_seen) VALUES (?, ?, ?, ?, ?, ?)',
-      [uuid, email, google_id, name, picture, Date.now()]
+      'INSERT INTO users (uuid, email, username, google_id, avatar, last_seen) VALUES (?, ?, ?, ?, ?, ?)',
+      [uuid, email, username, google_id, picture, Date.now()]
     )
     user = await db.get('SELECT * FROM users WHERE email = ?', [email])
   }
@@ -108,7 +112,7 @@ fastify.get('/google/callback', async (req, reply) => {
 })
 
 fastify.get('/me', async (req, reply) => {
-  const user = await db.get('SELECT uuid, email, last_seen, avatar FROM users WHERE uuid = ?', [req.query.uuid])
+  const user = await db.get('SELECT uuid, email, username, last_seen, avatar FROM users WHERE uuid = ?', [req.query.uuid])
   console.log(user);
   reply.send({ user })
 })
