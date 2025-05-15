@@ -77,7 +77,7 @@ fastify.register(fastifyOauth2, {
     auth: fastifyOauth2.GOOGLE_CONFIGURATION
   },
   startRedirectPath: '/google/login',
-  callbackUri: 'http://localhost:9443/auth/google/callback'
+  callbackUri: 'http://localhost:9443/'
 })
 
 fastify.get('/google/callback', async (req, reply) => {

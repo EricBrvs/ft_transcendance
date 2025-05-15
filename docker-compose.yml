@@ -7,7 +7,7 @@ services:
       - "9443:443"
     depends_on:
       - auth
-      # - user
+      - user
       # - dashboard
     restart: always
   auth:
@@ -20,11 +20,12 @@ services:
     restart: always
 
   user:
+    container_name: user
+    image: user
     build: ./backend/user
     volumes:
-      - user-data:/data
-    environment:
-      - SQLITE_DB_PATH=/data/user.db
+      - ./backend/auth:/app
+      - /app/node_modules
     restart: always
 
   dashboard:
