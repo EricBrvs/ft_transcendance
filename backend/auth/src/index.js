@@ -107,9 +107,8 @@ fastify.get('/google/callback', async (req, reply) => {
   reply.send({ token: localToken })
 })
 
-// DEBUG ENDPOINT FOR MIDDLEWARE CHECK
 fastify.get('/me', async (req, reply) => {
-  const user = await db.get('SELECT uuid, email, last_seen FROM users WHERE uuid = ?', [req.query.uuid])
+  const user = await db.get('SELECT uuid, email, last_seen, avatar FROM users WHERE uuid = ?', [req.query.uuid])
   console.log(user);
   reply.send({ user })
 })
