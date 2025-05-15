@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'backend'
+    static_configs:
+      - targets: ['auth:4000', 'game:4001']
+  - job_name: 'frontend'
+    static_configs:
+      - targets: ['frontend:3000']
