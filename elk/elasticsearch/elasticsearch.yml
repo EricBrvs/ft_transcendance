@@ -1,10 +1,26 @@
-discovery.type: single-node
+# Désactive le développement pour tout inclure
+cluster.name: "docker-cluster"
+node.name: "node-1"
 
-# ici je désactive complètement de la sécurité (auth et SSL) a voir si valide
-xpack.security.enabled: false
-xpack.security.http.ssl.enabled: false
-xpack.security.transport.ssl.enabled: false
-
+# 1) Écoute sur toutes les interfaces réseau
 network.host: 0.0.0.0
 
-bootstrap.memory_lock: true
+# 2) Ports HTTP/transport
+http.port: 9200
+transport.port: 9300
+
+# 3) Sécurité activée
+xpack.security.enabled: true
+
+# 4) SSL transport interne
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/instance/instance.key
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
+xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
+
+# 5) SSL HTTP (client)
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/instance/instance.key
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
+xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
