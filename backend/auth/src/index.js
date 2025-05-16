@@ -150,6 +150,51 @@ fastify.get('/google/callback', async (req, reply) => {
   reply.send({ token: localToken })
 })
 
+fastify.put('/update/', async (request, reply) => {
+  let uuid;
+  try {
+    uuid = await getUserUUIDFromJWT(request);
+  } catch {
+    return reply.code(401).send({ error: 'Unauthorized' });
+  }
+
+  const { old_password, new_password } = request.body;
+
+  if (!old_password || !new_password) {
+    return reply.code(400).send({ error: 'Missing passwords' });
+  }
+
+  const isValidPassword = (pwd) => {
+    return /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(pwd);
+  };
+
+  if (!isValidPassword(new_password)) {
+    return reply.code(400).send({
+      error: 'New password must be at least 8 characters, include one uppercase letter, one number, and one special character.'
+    });
+  }
+
+  try {
+    const user = await db.get('SELECT password FROM users WHERE uuid = ?', [uuid]);
+    if (!user) {
+      return reply.code(404).send({ error: 'User not found' });
+    }
+
+    const match = await bcrypt.compare(old_password, user.password);
+    if (!match) {
+      return reply.code(403).send({ error: 'Invalid current password' });
+    }
+
+    const newHash = await bcrypt.hash(new_password, 10);
+    await db.run('UPDATE users SET password = ? WHERE uuid = ?', [newHash, uuid]);
+
+    return reply.send({ success: true, message: 'Password updated' });
+  } catch (err) {
+    console.error('PUT /update error:', err);
+    return reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
 fastify.get('/me', async (req, reply) => {
   const user = await db.get('SELECT uuid, email, username, last_seen, avatar FROM users WHERE uuid = ?', [req.query.uuid])
   console.log(user);
