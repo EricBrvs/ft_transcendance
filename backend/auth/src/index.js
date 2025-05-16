@@ -55,11 +55,12 @@ fastify.post('/register', async (req, reply) => {
       [uuid, email, hash, username]
     );
     const userPayload = {
-      uuid,
-      email,
-      username
+      uuid: uuid,
+      email: email,
+      username: username
     };
-    await fetch(`${process.env.GLOBAL_URL}/internal/init`, {
+    console.log(userPayload);
+    await fetch(`${process.env.USER_URL}/internal/init`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
