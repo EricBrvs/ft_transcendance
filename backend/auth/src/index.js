@@ -36,19 +36,44 @@ await db.exec(`
 `)
 
 fastify.post('/register', async (req, reply) => {
-  const { email, password } = req.body
-  const hash = await bcrypt.hash(password, 10)
+  const { email, password } = req.body;
+  const isValidPassword = (pwd) => {
+    return /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(pwd);
+  };
+  if (!isValidPassword(password)) {
+    return reply.code(400).send({
+      error: 'Password must be at least 8 characters, include one uppercase letter, one number, and one special character.'
+    });
+  }
+  const hash = await bcrypt.hash(password, 10);
   const uuid = crypto.randomUUID();
   try {
     const localPart = email.split('@')[0].toLowerCase().trim();
     const username = localPart.replace(/[^a-z0-9]/g, '');
-    await db.run('INSERT INTO users (uuid, email, password, username) VALUES (?, ?, ?, ?)', [uuid, email, hash, username])
-    reply.send({ status: 'registered', uuid: uuid })
+    await db.run(
+      'INSERT INTO users (uuid, email, password, username) VALUES (?, ?, ?, ?)',
+      [uuid, email, hash, username]
+    );
+    const userPayload = {
+      uuid,
+      email,
+      username
+    };
+    await fetch(`${process.env.GLOBAL_URL}/internal/init`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-key': process.env.JWT_SECRET
+      },
+      body: JSON.stringify(userPayload)
+    });
+    reply.send({ status: 'registered', uuid });
   } catch (err) {
-    reply.code(400).send({ error: 'Email already used' })
-
+    console.error(err);
+    reply.code(400).send({ error: 'Email already used or invalid' });
   }
-})
+});
+
 
 fastify.post('/login', async (req, reply) => {
   const { email, password } = req.body
@@ -77,7 +102,7 @@ fastify.register(fastifyOauth2, {
     auth: fastifyOauth2.GOOGLE_CONFIGURATION
   },
   startRedirectPath: '/google/login',
-  callbackUri: 'http://localhost:9443/'
+  callbackUri: `${process.env.GLOBAL_URL}/auth/google/callback`
 })
 
 fastify.get('/google/callback', async (req, reply) => {
@@ -106,7 +131,21 @@ fastify.get('/google/callback', async (req, reply) => {
     )
     user = await db.get('SELECT * FROM users WHERE email = ?', [email])
   }
-
+  const userPayload = {
+    uuid: user.uuid,
+    email: user.email,
+    username: user.username,
+    avatar: user.avatar
+  };
+  console.log(userPayload);
+  await fetch(`${process.env.USER_URL}/internal/init`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-internal-key': process.env.JWT_SECRET
+    },
+    body: JSON.stringify(userPayload)
+  });
   const localToken = fastify.jwt.sign({ uuid: user.uuid, email: user.email })
   reply.send({ token: localToken })
 })
@@ -124,6 +163,13 @@ fastify.post('/logout', async (req, reply) => {
   reply.send({ status: 'logged out' })
 })
 
+
+/* 
+
+  INTERNAL ROUTES
+  ROUTE FOR INTERNAL USE ONLY (Can't be exposed to the public)
+
+*/
 fastify.post('/internal/lastseen', async (req, reply) => {
   try {
     const auth = req.headers.authorization

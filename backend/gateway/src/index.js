@@ -32,6 +32,14 @@ await fastify.register(fastifyHttpProxy, {
   http2: false
 })
 
+// Proxy vers le service USER
+await fastify.register(fastifyHttpProxy, {
+  upstream: process.env.USER_URL || 'http://user:9000',
+  prefix: '/user',
+  rewritePrefix: '',
+  http2: false
+});
+
 fastify.addHook('onRequest', async (req, reply) => {
   if (req.raw.url.startsWith('/auth')) return
   await fastify.authenticate(req, reply)
@@ -40,7 +48,7 @@ fastify.addHook('onRequest', async (req, reply) => {
 fastify.addHook('onResponse', async (req, reply) => {
   if (req.user?.id) {
     try {
-      await fetch(`${process.env.AUTH_URL}/internal/lastseen`, {
+      await fetch(`/internal/lastseen`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${req.headers.authorization?.split(' ')[1] || ''}`
