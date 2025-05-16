@@ -332,6 +332,66 @@ fastify.delete('/friends/:uuid', async (request, reply) => {
   }
 });
 
+fastify.get('/me', async (request, reply) => {
+  let uuid;
+  try {
+    uuid = await getUserUUIDFromJWT(request);
+  } catch {
+    return reply.code(401).send({ error: 'Invalid or missing token' });
+  }
+
+  try {
+    const user = await db.get(`
+      SELECT
+        u.uuid,
+        u.email,
+        u.username,
+        u.avatar,
+        o.color_items,
+        o.color_bg,
+        o.size_text,
+        o.speed_moves
+      FROM users u
+      JOIN user_opts o ON u.uuid = o.uuid
+      WHERE u.uuid = ?
+    `, [uuid]);
+
+    if (!user) {
+      return reply.code(404).send({ error: 'User not found' });
+    }
+
+    return reply.send(user);
+  } catch (err) {
+    console.error('DB error on GET /me:', err);
+    return reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
+fastify.get('/users', async (request, reply) => {
+  try {
+    try {
+      await getUserUUIDFromJWT(request);
+    } catch {
+      return reply.code(401).send({ error: 'Unauthorized' });
+    }
+
+    const users = await db.all(`
+      SELECT
+        u.uuid,
+        u.email,
+        u.username,
+        u.avatar
+      FROM users u
+      ORDER BY u.username
+    `);
+
+    return reply.send(users);
+  } catch (err) {
+    console.error('DB error on GET /users:', err);
+    return reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
 
 
 
