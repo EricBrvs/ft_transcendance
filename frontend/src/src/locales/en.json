@@ -8,6 +8,28 @@
 		"previewText": "Text preview",
 		"sampleText": "This is a sample text to see the selected size"
 	},
+	"dashboard": {
+		"title": "Dashboard",
+		"statistics": "Statistics",
+		"scoreEvolution": "Score Evolution",
+		"winLossRatio": "Win/Loss Ratio",
+		"you": "You",
+		"opponents": "Opponents",
+		"total": "Total",
+		"matches": "matches",
+		"wins": "wins",
+		"losses": "losses",
+		"vsAI": "VS AI",
+		"vsPlayers": "VS Players",
+		"score": "Score",
+		"winRate": "Win Rate",
+		"lossRate": "Loss Rate",
+		"versus": "versus",
+		"dateRange": "Date Range",
+		"lastWeek": "Last 7 days",
+		"lastMonth": "Last 30 days",
+		"allTime": "All Time"
+	},
 	"auth": {
 		"login": {
 			"title": "Login",
@@ -16,7 +38,9 @@
 			"loginButton": "Login",
 			"noAccount": "Don't have account?",
 			"googleLogin": "Sign in with Google",
-			"emailError": "Please enter a valid email address"
+			"emailError": "Please enter a valid email address",
+			"invalidCredentials": "Invalid email or password",
+			"networkError": "Server connection error"
 		},
 		"signup": {
 			"title": "Signup",
@@ -33,14 +57,19 @@
 			"passwordErrorSpecial": "one special character",
 			"passwordErrorNumber": "one number",
 			"passwordErrorLength": "at least 8 characters",
-			"passwordsNotMatch": "Passwords do not match"
+			"passwordsNotMatch": "Passwords do not match",
+			"emailAlreadyUsed": "This email is already in use",
+			"networkError": "Server connection error"
 		}
 	},
 	"menu": {
 		"home": "Home",
 		"profile": "Profile",
+		"dashboard": "Dashboard",
 		"game": "Game",
+		"tournaments": "Tournaments",
 		"logout": "Logout",
+		"settings": "Settings",
 		"test_text_size": "Text Size Test"
 	},
 	"home": {
@@ -53,10 +82,17 @@
 		"newGame": "New game",
 		"ai": "VS AI",
 		"player": "VS player",
+		"aivs": "VS AI",
+		"playervs": "VS player",
 		"start": "Start",
 		"history": "History",
 		"gameSettings": "Game settings",
-		"custom": "Custom"
+		"custom": "Custom",
+		"comingSoon": "Coming Soon"
+	},
+	"settings": {
+		"yourPicture": "Your picture",
+		"uploadNewProfilPicture": "Upload new profile picture"
 	},
 	"profile": {
 		"account": "Account",
@@ -75,6 +111,17 @@
 	},
 	"game": {
 		"gameCustom": "Custom game"
+	},
+	"tournaments": {
+		"createTournament": "Create Tournament",
+		"players": "players",
+		"playerName": "Player name",
+		"minPlayersError": "At least {0} players are needed for a {1}-player tournament",
+		"duplicateNameError": "This name is already used by another player",
+		"createError": "Cannot create tournament: some players have the same name",
+		"createButton": "Create Tournament",
+		"tournamentTree": "Tournament Bracket",
+		"copyId": "Copy ID"
 	},
 	"pong": {
 		"startGame": "Start Game",
@@ -98,7 +145,24 @@
 		"mobileControls": "Touch controls: Use arrows at bottom of screen | Center button for pause",
 		"editViewMode": "Edit View Mode Enabled (V to disable)",
 		"up": "Up",
-		"down": "Down"
+		"down": "Down",
+		"gameSettings": "Game Settings",
+		"plateauColor": "Board Color",
+		"paddleColor": "Paddle Color",
+		"ballSpeed": "Ball Speed",
+		"colorDefault": "Default",
+		"colorBlue": "Blue",
+		"colorRed": "Red",
+		"colorGreen": "Green",
+		"colorPurple": "Purple",
+		"speedNormal": "Normal",
+		"speedFast": "Fast",
+		"speedTurbo": "Turbo",
+		"tournamentMatch": "Tournament Match",
+		"matchId": "Match ID",
+		"enterMatchId": "Enter Match ID",
+		"startTournamentMatch": "Start Match",
+		"cancel": "Cancel"
 	}
 }
 

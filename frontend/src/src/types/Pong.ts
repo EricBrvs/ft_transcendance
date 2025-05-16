@@ -47,14 +47,28 @@ export type PauseMenuProps = {
   getViewName: (viewIdx: number) => string;
 }
 
+export type GameSettings = {
+  plateauColor: 'default' | 'blue' | 'red';
+  paddleColor: 'default' | 'green' | 'purple';
+  ballSpeed: 'normal' | 'fast' | 'turbo';
+}
+
 export type GameMenuProps = {
   showMenu: boolean;
   score: ScoreState;
   maxScore: number;
   startGame: () => void;
   quitGame: () => void;
+  settings: GameSettings;
+  onSettingsChange: (settings: GameSettings) => void;
+  onStartTournamentMatch?: (matchId: string) => void;
 }
 
 export type CountdownProps = {
   countdown: number;
 }
+
+export type TournamentMatchSettings = {
+  matchId: string | null;
+  isInTournament: boolean;
+};

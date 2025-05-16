@@ -8,6 +8,21 @@
 		"previewText": "Aperçu du texte",
 		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée"
 	},
+	"dashboard": {
+		"title": "Tableau de bord",
+		"statistics": "Statistiques",
+		"scoreEvolution": "Évolution des scores",
+		"winLossRatio": "Ratio Victoires/Défaites",
+		"you": "Vous",
+		"opponents": "Adversaires",
+		"total": "Total",
+		"matches": "matchs",
+		"wins": "victoires",
+		"losses": "défaites",
+		"vsAI": "VS IA",
+		"vsPlayers": "VS Joueurs",
+		"score": "Score"
+	},
 	"auth": {
 		"login": {
 			"title": "Connexion",
@@ -16,7 +31,9 @@
 			"loginButton": "Se connecter",
 			"noAccount": "Vous n'avez pas de compte ?",
 			"googleLogin": "Se connecter avec Google",
-			"emailError": "Veuillez entrer une adresse email valide"
+			"emailError": "Veuillez entrer une adresse email valide",
+			"invalidCredentials": "Email ou mot de passe incorrect",
+			"networkError": "Erreur de connexion au serveur"
 		},
 		"signup": {
 			"title": "Inscription",
@@ -33,14 +50,19 @@
 			"passwordErrorSpecial": "un caractère spécial",
 			"passwordErrorNumber": "un chiffre",
 			"passwordErrorLength": "au moins 8 caractères",
-			"passwordsNotMatch": "Les mots de passe ne correspondent pas"
+			"passwordsNotMatch": "Les mots de passe ne correspondent pas",
+			"emailAlreadyUsed": "Cet email est déjà utilisé",
+			"networkError": "Erreur de connexion au serveur"
 		}
 	},
 	"menu": {
 		"home": "Accueil",
 		"profile": "Profil",
+		"dashboard": "Tableau de bord",
 		"game": "Jeu",
+		"tournaments": "Tournois",
 		"logout": "Déconnexion",
+		"settings": "Paramètres",
 		"test_text_size": "Test Taille Texte"
 	},
 	"home": {
@@ -53,10 +75,17 @@
 		"newGame": "Nouvelle partie",
 		"ai": "VS IA",
 		"player": "VS joueur",
+		"aivs": "VS IA",
+		"playervs": "VS joueur",
 		"start": "Lancer",
 		"history": "Historique",
 		"gameSettings": "Paramètres de jeu",
-		"custom": "Personnaliser"
+		"custom": "Personnaliser",
+		"comingSoon": "Prochainement"
+	},
+	"settings": {
+		"yourPicture": "Votre photo",
+		"uploadNewProfilPicture": "Télécharger une nouvelle photo de profil"
 	},
 	"profile": {
 		"account": "Compte",
@@ -76,10 +105,21 @@
 	"game": {
 		"gameCustom": "Jeu personnalisé"
 	},
+	"tournaments": {
+		"createTournament": "Créer un tournoi",
+		"players": "joueurs",
+		"playerName": "Nom du joueur",
+		"minPlayersError": "Il faut au moins {0} joueurs pour un tournoi de {1} joueurs",
+		"duplicateNameError": "Ce nom est déjà utilisé par un autre joueur",
+		"createError": "Impossible de créer le tournoi : certains joueurs ont le même nom",
+		"createButton": "Créer le tournoi",
+		"tournamentTree": "Arbre du tournoi",
+		"copyId": "Copier l'ID"
+	},
 	"pong": {
 		"startGame": "Commencer la partie",
-		"resumeGame": "Reprendre la partie",
-		"quitGame": "Quitter le jeu",
+		"resumeGame": "Reprendre",
+		"quitGame": "Quitter",
 		"backToMenu": "Retour au menu",
 		"changeView": "Changer de vue",
 		"view": "Vue",
@@ -98,7 +138,25 @@
 		"mobileControls": "Commandes tactiles: Utilisez les flèches en bas de l'écran | Bouton central pour mettre en pause",
 		"editViewMode": "Mode Édition Vue Activé (V pour désactiver)",
 		"up": "Haut",
-		"down": "Bas"
+		"down": "Bas",
+		"gameSettings": "Paramètres du jeu",
+		"plateauColor": "Couleur du plateau",
+		"paddleColor": "Couleur des raquettes",
+		"ballSpeed": "Vitesse de la balle",
+		"colorDefault": "Par défaut",
+		"colorBlue": "Bleu",
+		"colorRed": "Rouge",
+		"colorGreen": "Vert",
+		"colorPurple": "Violet",
+		"speedNormal": "Normale",
+		"speedFast": "Rapide",
+		"speedTurbo": "Turbo",
+		"playAgain": "Rejouer",
+		"tournamentMatch": "Match de tournoi",
+		"matchId": "ID du match",
+		"enterMatchId": "Entrer l'ID du match",
+		"startTournamentMatch": "Commencer le match",
+		"cancel": "Annuler"
 	}
 }
 
