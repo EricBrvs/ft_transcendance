@@ -151,7 +151,7 @@ fastify.get('/google/callback', async (req, reply) => {
   reply.send({ token: localToken })
 })
 
-fastify.put('/update/', async (request, reply) => {
+fastify.put('/update', async (request, reply) => {
   let uuid;
   try {
     uuid = await getUserUUIDFromJWT(request);
@@ -174,8 +174,9 @@ fastify.put('/update/', async (request, reply) => {
       error: 'New password must be at least 8 characters, include one uppercase letter, one number, and one special character.'
     });
   }
-
   try {
+  console.log('UUID:', uuid);
+
     const user = await db.get('SELECT password FROM users WHERE uuid = ?', [uuid]);
     if (!user) {
       return reply.code(404).send({ error: 'User not found' });
@@ -237,5 +238,15 @@ fastify.post('/internal/lastseen', async (req, reply) => {
   }
 })
 
+async function getUserUUIDFromJWT(request) {
+  const authHeader = request.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new Error('No token');
+  }
+
+  const token = authHeader.split(' ')[1];
+  const payload = await request.jwtVerify(); // ou: fastify.jwt.verify(token)
+  return payload.uuid;
+}
 
 fastify.listen({ port: 9000, host: '0.0.0.0' })
