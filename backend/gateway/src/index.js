@@ -46,19 +46,26 @@ fastify.addHook('onRequest', async (req, reply) => {
 })
 
 fastify.addHook('onResponse', async (req, reply) => {
-  if (req.user?.id) {
-    try {
-      await fetch(`/internal/lastseen`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${req.headers.authorization?.split(' ')[1] || ''}`
-        }
-      })
-    } catch (err) {
-      fastify.log.warn('Failed to update last_seen')
-    }
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) return;
+
+  try {
+    const payload = await fastify.jwt.verify(token);
+    if (!payload?.uuid) return;
+
+    await fetch(`${process.env.AUTH_URL}/internal/lastseen`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    fastify.log.warn('Failed to update last_seen:', err.message);
   }
-})
+});
+
 
 fastify.decorate("authenticate", async (request, reply) => {
   try {

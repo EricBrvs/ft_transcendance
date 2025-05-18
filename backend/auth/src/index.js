@@ -175,8 +175,6 @@ fastify.put('/update', async (request, reply) => {
     });
   }
   try {
-  console.log('UUID:', uuid);
-
     const user = await db.get('SELECT password FROM users WHERE uuid = ?', [uuid]);
     if (!user) {
       return reply.code(404).send({ error: 'User not found' });
@@ -237,6 +235,48 @@ fastify.post('/internal/lastseen', async (req, reply) => {
     reply.code(401).send({ error: 'Unauthorized' })
   }
 })
+
+fastify.get('/internal/lastseen', async (req, reply) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth?.split(' ')[1];
+    if (!token) throw new Error('No token');
+
+    const payload = await fastify.jwt.verify(token);
+    const uuid = payload.uuid;
+    if (!uuid) throw new Error('Missing uuid in token');
+
+    const user = await db.get('SELECT last_seen FROM users WHERE uuid = ?', [uuid]);
+    if (!user) return reply.code(404).send({ error: 'User not found' });
+
+    reply.send({ last_seen: user.last_seen });
+  } catch (err) {
+    console.error('GET /internal/lastseen error:', err.message);
+    reply.code(401).send({ error: 'Unauthorized or token invalid' });
+  }
+});
+
+fastify.get('/internal/lastseen/user/:uuid', async (req, reply) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) throw new Error('No token');
+    await fastify.jwt.verify(token);
+
+    const { uuid } = req.params;
+    if (!uuid) return reply.code(400).send({ error: 'Missing uuid in params' });
+
+    const user = await db.get('SELECT last_seen FROM users WHERE uuid = ?', [uuid]);
+    if (!user) {
+      return reply.code(404).send({ error: 'User not found' });
+    }
+
+    reply.send({ last_seen: user.last_seen });
+  } catch (err) {
+    console.error('GET /internal/lastseen/user/:uuid error:', err.message);
+    return reply.code(401).send({ error: 'Unauthorized' });
+  }
+});
+
 
 async function getUserUUIDFromJWT(request) {
   const authHeader = request.headers.authorization;

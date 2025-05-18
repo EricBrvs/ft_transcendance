@@ -341,6 +341,7 @@ fastify.get('/me', async (request, reply) => {
   }
 
   try {
+
     const user = await db.get(`
       SELECT
         u.uuid,
@@ -360,21 +361,50 @@ fastify.get('/me', async (request, reply) => {
       return reply.code(404).send({ error: 'User not found' });
     }
 
-    return reply.send(user);
+    let last_seen = null;
+
+    try {
+      const authRes = await fetch(`${process.env.AUTH_URL}/internal/lastseen`, {
+        method: 'GET',
+        headers: {
+          'Authorization': request.headers.authorization
+        }
+      });
+
+      if (authRes.ok) {
+        const data = await authRes.json();
+        last_seen = data.last_seen || null;
+      } else {
+        console.warn(`Auth responded with ${authRes.status} on last_seen`);
+      }
+    } catch (fetchErr) {
+      console.warn('Failed to fetch last_seen from auth:', fetchErr.message);
+    }
+
+    return reply.send({
+      ...user,
+      last_seen
+    });
   } catch (err) {
     console.error('DB error on GET /me:', err);
     return reply.code(500).send({ error: 'Internal server error' });
   }
 });
 
-fastify.get('/users', async (request, reply) => {
-  try {
-    try {
-      await getUserUUIDFromJWT(request);
-    } catch {
-      return reply.code(401).send({ error: 'Unauthorized' });
-    }
 
+fastify.get('/users', async (request, reply) => {
+  let token;
+  try {
+    const authHeader = request.headers.authorization;
+    token = authHeader?.split(' ')[1];
+    if (!token) throw new Error('No token');
+
+    await fastify.jwt.verify(token); // Authentifie sans extraire uuid
+  } catch {
+    return reply.code(401).send({ error: 'Unauthorized' });
+  }
+
+  try {
     const users = await db.all(`
       SELECT
         u.uuid,
@@ -385,12 +415,27 @@ fastify.get('/users', async (request, reply) => {
       ORDER BY u.username
     `);
 
-    return reply.send(users);
+    const enriched = await Promise.all(users.map(async (user) => {
+      try {
+        const res = await fetch(`${process.env.AUTH_URL}/internal/lastseen/user/${user.uuid}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = res.ok ? await res.json() : {};
+        return { ...user, last_seen: data.last_seen || null };
+      } catch (err) {
+        return { ...user, last_seen: null };
+      }
+    }));
+
+    return reply.send(enriched);
   } catch (err) {
     console.error('DB error on GET /users:', err);
     return reply.code(500).send({ error: 'Internal server error' });
   }
 });
+
 
 
 
