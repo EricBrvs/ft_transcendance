@@ -62,7 +62,7 @@ services:
 
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     volumes:
       - ./elk/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./certs/instance:/usr/share/elasticsearch/config/certs/instance:ro
@@ -72,6 +72,8 @@ services:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       discovery.type: "single-node"
       ELASTIC_PASSWORD: "4242"
+
+      xpack.security.http.ssl.enabled: "false"
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -80,17 +82,17 @@ services:
         soft: -1
         hard: -1
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - ft_transcendance_default
-    
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - ft_transcendance_default
+
 
 volumes:
   esdata:

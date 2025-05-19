@@ -1,8 +1,17 @@
 server.name: kibana
 server.host: "0.0.0.0"
 
+# Connexion HTTP simple car Elasticsearch a SSL désactivé
 elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Utiliser l'utilisateur kibana_system
+elasticsearch.username: "kibana_system"
+elasticsearch.password: GhoLRlpqd5G-esYjEx1Z
 
 # Clé obligatoire pour le chiffrement des objets sauvegardés dans Kibana
 xpack.encryptedSavedObjects.encryptionKey: "Y2xPTqoeUA0ZfrRf0JPzSeawnJVrJder"
+
+# Ajouter des clés d'encryption pour éviter les avertissements
+xpack.security.encryptionKey: "32charslongpaddedlavieestbeller32"
+xpack.reporting.encryptionKey: "32charslongpaddedlavieestbeller32"
 

@@ -19,8 +19,8 @@ xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/instance
 xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
 xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
 
-# 5) SSL HTTP (client)
-xpack.security.http.ssl.enabled: true
+# 5) SSL HTTP (client) - Désactivé pour faciliter le débogage initial
+xpack.security.http.ssl.enabled: false
 xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/instance/instance.key
 xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
 xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
