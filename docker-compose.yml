@@ -69,7 +69,7 @@ services:
       - ./certs/ca:/usr/share/elasticsearch/config/certs/ca:ro
       - esdata:/usr/share/elasticsearch/data
     environment:
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       discovery.type: "single-node"
       ELASTIC_PASSWORD: "4242"
 
