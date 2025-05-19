@@ -35,48 +35,70 @@ services:
       - ./backend/game:/app
       - /app/node_modules
     restart: always
-  frontend:
-    build: ./frontend
-    volumes:
-      - ./frontend/src:/app/src
-    ports:
-      - "3000:3000"
-    depends_on:
-      - auth
+#   frontend:
+#     build: ./frontend
+#     volumes:
+#       - ./frontend/src:/app/src
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - auth
   logstash:
     build: ./elk/logstash
     volumes:
       - ./elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs/auth:/var/log/app
     ports:
-      - "5044:5044"  # TCP input
+      - "5044:5044"
     depends_on:
       - auth
 
   kibana:
-    image: kibana:8.11.1
+    image: kibana:8.13.4
+    container_name: kibana
     ports:
       - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    volumes:
+      - ./elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./certs:/usr/share/kibana/config/certs:ro
     depends_on:
       - elasticsearch
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=2048
+
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    volumes:
+      - ./elk/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./certs/instance:/usr/share/elasticsearch/config/certs/instance:ro
+      - ./certs/ca:/usr/share/elasticsearch/config/certs/ca:ro
+      - esdata:/usr/share/elasticsearch/data
     environment:
-      - discovery.type=single-node
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      discovery.type: "single-node"
+      ELASTIC_PASSWORD: "4242"
+
+      xpack.security.http.ssl.enabled: "false"
     ports:
       - "9200:9200"
+      - "9300:9300"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - ft_transcendance_default
+
 
 volumes:
-  auth-data:
-  user-data:
-  dashboard-data:
   esdata:
