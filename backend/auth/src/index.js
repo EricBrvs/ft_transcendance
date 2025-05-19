@@ -138,7 +138,6 @@ fastify.get('/google/callback', async (req, reply) => {
     username: user.username,
     avatar: user.avatar
   };
-  console.log(userPayload);
   await fetch(`${process.env.USER_URL}/internal/init`, {
     method: 'POST',
     headers: {
@@ -148,7 +147,8 @@ fastify.get('/google/callback', async (req, reply) => {
     body: JSON.stringify(userPayload)
   });
   const localToken = fastify.jwt.sign({ uuid: user.uuid, email: user.email })
-  reply.send({ token: localToken })
+  //reply.send({ token: localToken })
+	reply.redirect(`http://localhost:5173/?code=${localToken}`)
 })
 
 fastify.put('/update', async (request, reply) => {
