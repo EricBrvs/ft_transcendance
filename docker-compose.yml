@@ -8,7 +8,7 @@ services:
     depends_on:
       - auth
       - user
-      # - dashboard
+      - game
     restart: always
   auth:
     container_name: auth
@@ -27,15 +27,14 @@ services:
       - ./backend/user:/app
       - /app/node_modules
     restart: always
-
-  dashboard:
-    build: ./backend/dashboard
+  game:
+    container_name: game
+    image: game
+    build: ./backend/game
     volumes:
-      - dashboard-data:/data
-    environment:
-      - SQLITE_DB_PATH=/data/dashboard.db
+      - ./backend/game:/app
+      - /app/node_modules
     restart: always
-
   frontend:
     build: ./frontend
     volumes:
