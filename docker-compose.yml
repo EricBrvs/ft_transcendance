@@ -1,41 +1,48 @@
 services:
-  frontend:
-    build: ./frontend
-    volumes:
-      - ./frontend/src:/app/src
+  gateway:
+    container_name: gateway
+    build: ./backend/gateway
+    image: gateway
     ports:
-      - "3000:3000"
+      - "9443:443"
     depends_on:
       - auth
+      - user
       - game
-
+    restart: always
   auth:
+    container_name: auth
+    image: auth
     build: ./backend/auth
     volumes:
       - ./backend/auth:/app
-    ports:
-      - "4000:4000"
-    environment:
-      - SERVICE_NAME=auth
+      - /app/node_modules  
+    restart: always
 
+  user:
+    container_name: user
+    image: user
+    build: ./backend/user
+    volumes:
+      - ./backend/user:/app
+      - /app/node_modules
+    restart: always
   game:
+    container_name: game
+    image: game
     build: ./backend/game
     volumes:
       - ./backend/game:/app
-    ports:
-      - "4001:4001"
-    environment:
-      - SERVICE_NAME=game
-
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-      - auth
-      - game
-
+      - /app/node_modules
+    restart: always
+#   frontend:
+#     build: ./frontend
+#     volumes:
+#       - ./frontend/src:/app/src
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - auth
   logstash:
     build: ./elk/logstash
     volumes:
@@ -45,7 +52,6 @@ services:
       - "5044:5044"
     depends_on:
       - auth
-      - game
 
   kibana:
     image: kibana:8.13.4

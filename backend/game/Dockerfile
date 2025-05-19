@@ -1,13 +1,20 @@
-FROM node:18
+FROM node:24-slim
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
+#DEV/DEBUG COMMAND \/ NEED TO DELETE IT
+RUN npm install -g nodemon
+RUN apt update && apt install -y curl sqlite3
+#END DEV/DEBUG COMMAND
+
 
 COPY . .
 
-EXPOSE 3000
+RUN mkdir -p ./data
 
-CMD ["npm", "run", "start:dev"]
+EXPOSE 9000
+
+# CMD ["node", "index.js"]
+CMD ["npm", "run", "dev"]
