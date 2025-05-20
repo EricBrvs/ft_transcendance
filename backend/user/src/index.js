@@ -105,13 +105,36 @@ fastify.get('/:uuid', async (request, reply) => {
     if (!user) {
       return reply.code(404).send({ error: 'User not found' });
     }
+    let last_seen = null;
 
-    return reply.send(user);
+    try {
+      const authRes = await fetch(`${process.env.AUTH_URL}/internal/lastseen/user/${uuid}`, {
+        headers: {
+          Authorization: request.headers.authorization
+        }
+      });
+
+      if (authRes.ok) {
+        const data = await authRes.json();
+        last_seen = data.last_seen || null;
+      } else {
+        console.warn(`Auth responded with ${authRes.status} on last_seen`);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch last_seen from auth:', err.message);
+    }
+
+    return reply.send({
+      ...user,
+      last_seen
+    });
+
   } catch (err) {
     console.error('DB error on GET /:uuid:', err);
     return reply.code(500).send({ error: 'Internal server error' });
   }
 });
+
 
 
 fastify.put('/update', async (request, reply) => {
