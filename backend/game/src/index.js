@@ -138,6 +138,29 @@ fastify.get('/match/:uuid', async (request, reply) => {
   }
 });
 
+fastify.get('/match/user/:uuid', async (request, reply) => {
+  const { uuid } = request.params;
+
+  try {
+    const matches = await db.all(`
+      SELECT *
+      FROM matchs
+      WHERE player = ? OR guest = ? OR guest2 = ?
+      ORDER BY starttime DESC
+    `, [uuid, uuid, uuid]);
+
+    if (!matches || matches.length === 0) {
+      return reply.code(404).send({ error: 'No matches found for this user' });
+    }
+
+    reply.send(matches);
+  } catch (err) {
+    console.error('GET /match/user/:uuid error:', err);
+    reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
+
 //CRUD TOURNAMENT
 fastify.post('/tournament', async (request, reply) => {
   const { host, players } = request.body;
@@ -265,6 +288,34 @@ fastify.get('/tournaments', async (request, reply) => {
     reply.code(500).send({ error: 'Internal server error' });
   }
 });
+fastify.get('/tournament/user/:uuid', async (request, reply) => {
+  const { uuid } = request.params;
+
+  try {
+    const tournaments = await db.all(`
+      SELECT *
+      FROM tournaments
+      WHERE host = ?
+      ORDER BY finished ASC, uuid DESC
+    `, [uuid]);
+
+    if (!tournaments || tournaments.length === 0) {
+      return reply.code(404).send({ error: 'No tournaments found for this user' });
+    }
+
+    const parsed = tournaments.map(t => ({
+      ...t,
+      players: t.players ? JSON.parse(t.players) : null,
+      match: t.match ? JSON.parse(t.match) : null
+    }));
+
+    reply.send(parsed);
+  } catch (err) {
+    console.error('GET /tournament/user/:uuid error:', err);
+    reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
 
 
 async function createMatch(player = null, guest = null, guest2 = null, tournament = null) {
