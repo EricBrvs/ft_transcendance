@@ -21,7 +21,7 @@ KIBANA_SECURITY_KEY=<32_character_security_key>
 KIBANA_REPORTING_KEY=<32_character_reporting_key>
 
 # Elasticsearch configuration
-ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+ELASTICSEARCH_HOSTS=https://elasticsearch:9200
 ```
 
 2. Personnalisez les mots de passe et clés d'encryption selon vos besoins. Les mots de passe par défaut sont:
@@ -51,5 +51,7 @@ Si vous avez exécuté `docker compose down -v` ou supprimé les volumes:
 
 ### Accès aux services
 
-- Kibana: http://localhost:5601
-- Elasticsearch: http://localhost:9200 (utilisateur: elastic, mot de passe: `ELASTIC_PASSWORD` défini dans .env)
+- Kibana: https://localhost:5601
+- Elasticsearch: https://localhost:9200 (utilisateur: elastic, mot de passe: `ELASTIC_PASSWORD` défini dans .env)
+
+> **Note:** Les services utilisent maintenant HTTPS avec des certificats auto-signés. Vous devrez peut-être accepter les certificats dans votre navigateur lors de la première connexion.

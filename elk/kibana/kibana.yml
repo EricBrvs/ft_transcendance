@@ -2,12 +2,17 @@ server.name: kibana
 server.host: "0.0.0.0"
 
 elasticsearch.hosts: ${ELASTICSEARCH_HOSTS}
+elasticsearch.ssl.verificationMode: none
+elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca/ca.crt"]
 
 elasticsearch.username: "kibana_system"
 elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
 
-xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+server.ssl.enabled: true
+server.ssl.certificate: "/usr/share/kibana/config/certs/instance/instance.crt"
+server.ssl.key: "/usr/share/kibana/config/certs/instance/instance.key"
 
+xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
 xpack.security.encryptionKey: ${KIBANA_SECURITY_KEY}
 xpack.reporting.encryptionKey: ${KIBANA_REPORTING_KEY}
 

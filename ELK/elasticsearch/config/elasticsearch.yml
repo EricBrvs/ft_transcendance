@@ -4,9 +4,17 @@ discovery.type: single-node
 xpack.security.enabled: true
 xpack.security.authc.api_key.enabled: true
 
-# Add these memory settings
+# SSL/TLS Configuration
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/instance/instance.key
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
+xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca/ca.crt" ]
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/instance/instance.key
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/instance/instance.crt
+xpack.security.transport.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca/ca.crt" ]
+xpack.security.transport.ssl.verification_mode: certificate
+
 bootstrap.memory_lock: true
 xpack.ml.enabled: false
-# xpack.monitoring.collection.enabled: true
 xpack.watcher.enabled: false
-

@@ -1,112 +1,126 @@
 #!/bin/bash
 
-# Chargement des variables d'environnement
+# Load environment variables
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
-    echo "Variables d'environnement chargées depuis .env"
+    echo "Environment variables loaded from .env"
 else
-    echo "Fichier .env non trouvé. Assurez-vous qu'il existe."
+    echo ".env file not found. Please ensure it exists."
     exit 1
 fi
 
-# Configure le paramètre vm.max_map_count pour Elasticsearch
-echo "Configuration de vm.max_map_count pour Elasticsearch..."
+# Verify certificates exist
+echo "Verifying certificates..."
+if [ ! -f "certs/ca/ca.crt" ] || [ ! -f "certs/ca/ca.key" ] || [ ! -f "certs/instance/instance.crt" ] || [ ! -f "certs/instance/instance.key" ]; then
+    echo "Warning: Some certificates are missing. Ensure all required certificates are present in certs/ca and certs/instance."
+    exit 1
+fi
+echo "Certificates verification complete."
+
+# Configure vm.max_map_count for Elasticsearch
+echo "Setting vm.max_map_count for Elasticsearch..."
 sudo sysctl -w vm.max_map_count=262144
 
-# Lance les conteneurs Docker en s'assurant que elasticsearch-init s'exécute en premier
-echo "Démarrage des conteneurs..."
+# Start Docker containers, ensuring elasticsearch-init runs first
+echo "Starting Docker containers..."
 docker compose up -d elasticsearch
 
-# Attendre que Elasticsearch démarre complètement
-echo "Attente du démarrage complet d'Elasticsearch..."
-timeout=120  # Timeout de 2 minutes
+# Wait for Elasticsearch to fully start
+echo "Waiting for Elasticsearch to start..."
+timeout=120  # 2-minute timeout
 start_time=$(date +%s)
 while true; do
     current_time=$(date +%s)
     elapsed=$((current_time - start_time))
     
     if [ $elapsed -gt $timeout ]; then
-        echo "Timeout dépassé en attendant qu'Elasticsearch soit prêt"
+        echo "Timeout while waiting for Elasticsearch readiness."
         exit 1
     fi
     
-    if curl -s -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" > /dev/null; then
-        echo "Elasticsearch est prêt"
+    if curl --insecure -s -u elastic:${ELASTIC_PASSWORD} "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" > /dev/null; then
+        echo "Elasticsearch is ready."
         break
     fi
     
-    echo "En attente qu'Elasticsearch soit prêt... ($elapsed secondes écoulées)"
+    echo "Waiting for Elasticsearch readiness... ($elapsed seconds elapsed)"
     sleep 5
 done
 
-# Vérifier si l'utilisateur kibana_system existe
-echo "Vérification de l'existence de l'utilisateur kibana_system..."
-user_check=$(docker exec elasticsearch curl -s -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_security/user/kibana_system")
+# Check if kibana_system user exists
+echo "Checking for kibana_system user..."
+user_check=$(docker exec elasticsearch curl --insecure -s -u elastic:${ELASTIC_PASSWORD} "https://localhost:9200/_security/user/kibana_system")
 
-if echo "$user_check" | grep -q "\"kibana_system\""; then
-  echo "L'utilisateur kibana_system existe, réinitialisation du mot de passe..."
+if echo "$user_check" | grep -q '"kibana_system"'; then
+  echo "kibana_system user exists, resetting password..."
   
-  # Réinitialiser le mot de passe de kibana_system
+  # Reset kibana_system password with retries
   for i in {1..3}; do
-    echo "Tentative $i de réinitialisation du mot de passe kibana_system..."
-    result=$(docker exec elasticsearch curl -s -X POST -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_security/user/kibana_system/_password" -H "Content-Type: application/json" -d "{\"password\": \"${KIBANA_SYSTEM_PASSWORD}\"}")
+    echo "Attempt $i to reset kibana_system password..."
+    result=$(docker exec elasticsearch curl --insecure -s -X POST -u elastic:${ELASTIC_PASSWORD} \
+        "https://localhost:9200/_security/user/kibana_system/_password" \
+        -H "Content-Type: application/json" \
+        -d "{\"password\": \"${KIBANA_SYSTEM_PASSWORD}\"}")
     
     if [[ "$result" == "{}" ]]; then
-      echo "Mot de passe réinitialisé avec succès!"
+      echo "Password reset successfully."
       break
     else
-      echo "Échec de la réinitialisation, nouvelle tentative dans 3 secondes..."
-      echo "Réponse: $result"
+      echo "Reset failed, retrying in 3 seconds..."
+      echo "Response: $result"
       sleep 3
     fi
     
     if [ "$i" -eq 3 ]; then
-      echo "Impossible de réinitialiser le mot de passe après 3 tentatives."
+      echo "Failed to reset password after 3 attempts."
       exit 1
     fi
   done
 else
-  echo "L'utilisateur kibana_system n'existe pas, création de l'utilisateur..."
+  echo "kibana_system user not found, creating user..."
   
-  # Vérifier si le rôle kibana_system existe
-  role_check=$(docker exec elasticsearch curl -s -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_security/role/kibana_system")
+  # Check if kibana_system role exists
+  role_check=$(docker exec elasticsearch curl --insecure -s -u elastic:${ELASTIC_PASSWORD} \
+      "https://localhost:9200/_security/role/kibana_system")
   
-  if ! echo "$role_check" | grep -q "\"kibana_system\""; then
-    echo "Le rôle kibana_system n'existe pas, création du rôle..."
-    docker exec elasticsearch curl -s -X POST -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_security/role/kibana_system" -H "Content-Type: application/json" -d '{
-      "cluster": ["monitor", "manage_index_templates", "manage_ilm", "manage_ingest_pipelines"],
-      "indices": [
-        {
-          "names": [ ".kibana*" ],
-          "privileges": ["all"]
-        }
-      ]
-    }'
+  if ! echo "$role_check" | grep -q '"kibana_system"'; then
+    echo "kibana_system role not found, creating role..."
+    docker exec elasticsearch curl --insecure -s -X POST -u elastic:${ELASTIC_PASSWORD} \
+      "https://localhost:9200/_security/role/kibana_system" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "cluster": ["monitor", "manage_index_templates", "manage_ilm", "manage_ingest_pipelines"],
+        "indices": [
+          {
+            "names": [ ".kibana*" ],
+            "privileges": ["all"]
+          }
+        ]
+      }'
   fi
   
-  # Créer l'utilisateur kibana_system
-  create_result=$(docker exec elasticsearch curl -s -X POST -u elastic:${ELASTIC_PASSWORD} "http://localhost:9200/_security/user/kibana_system" -H "Content-Type: application/json" -d "{
-    \"password\": \"${KIBANA_SYSTEM_PASSWORD}\",
-    \"roles\": [\"kibana_system\"],
-    \"full_name\": \"Kibana System User\",
-    \"email\": \"kibana@localhost\"
-  }")
+  # Create kibana_system user
+  echo "Creating kibana_system user..."
+  create_result=$(docker exec elasticsearch curl --insecure -s -X POST -u elastic:${ELASTIC_PASSWORD} \
+      "https://localhost:9200/_security/user/kibana_system" \
+      -H "Content-Type: application/json" \
+      -d "{\"password\": \"${KIBANA_SYSTEM_PASSWORD}\", \"roles\": [\"kibana_system\"], \"full_name\": \"Kibana System User\", \"email\": \"kibana@localhost\"}")
   
-  echo "Résultat de la création: $create_result"
-  
+  echo "Creation result: $create_result"
   if [[ "$create_result" == "{}" ]]; then
-    echo "Utilisateur kibana_system créé avec succès!"
+    echo "kibana_system user created successfully."
   else
-    echo "Échec de la création de l'utilisateur kibana_system."
+    echo "Failed to create kibana_system user."
     exit 1
   fi
 fi
 
-# Attendre un peu après la réinitialisation
+# Pause briefly after password operations
+echo "Pausing briefly before starting remaining services..."
 sleep 5
 
-# Démarrer les autres services
-echo "Démarrage des autres services..."
+# Start other services
+echo "Starting remaining services..."
 docker compose up -d
 
-echo "Service démarré avec succès!"
+echo "Services started successfully!"

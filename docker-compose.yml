@@ -48,10 +48,16 @@ services:
     volumes:
       - ./ELK/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logs/auth:/var/log/app
+      - ./certs/ca:/usr/share/logstash/config/certs/ca:ro
+      - ./certs/instance:/usr/share/logstash/config/certs/instance:ro
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
       - "5044:5044"
     depends_on:
       - auth
+    networks:
+      - ELK
 
 # Service setup_kibana supprimé car il n'est plus nécessaire avec la configuration statique de Kibana
 
@@ -60,6 +66,8 @@ services:
     image: docker.elastic.co/kibana/kibana:8.13.4
     volumes:
       - ./ELK/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./certs/instance:/usr/share/kibana/config/certs/instance:ro
+      - ./certs/ca:/usr/share/kibana/config/certs/ca:ro
     environment:
       - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
       - ELASTICSEARCH_USERNAME=kibana_system
@@ -75,28 +83,16 @@ services:
     networks:
       - ELK
 
-  elasticsearch-init:
-    container_name: elasticsearch-init
-    image: docker:23.0.1-cli
-    privileged: true
-    volumes:
-      - ./ELK/init-elasticsearch.sh:/init-elasticsearch.sh:ro
-    command: sh -c "chmod +x /init-elasticsearch.sh && /init-elasticsearch.sh"
-    networks:
-      - ELK
-
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
-    depends_on:
-      - elasticsearch-init
     volumes:
-      - ./ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./ELK/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./certs/instance:/usr/share/elasticsearch/config/certs/instance:ro
       - ./certs/ca:/usr/share/elasticsearch/config/certs/ca:ro
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "-u", "elastic:${ELASTIC_PASSWORD}", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s"]
+      test: ["CMD", "curl", "-f", "-k", "-u", "elastic:${ELASTIC_PASSWORD}", "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s"]
       interval: 10s
       timeout: 15s
       retries: 20
@@ -104,7 +100,7 @@ services:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       discovery.type: "single-node"
       ELASTIC_PASSWORD: "${ELASTIC_PASSWORD}"
-      xpack.security.http.ssl.enabled: "false"
+      xpack.security.http.ssl.enabled: "true"
     ports:
       - "9200:9200"
       - "9300:9300"

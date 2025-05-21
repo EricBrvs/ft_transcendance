@@ -1,0 +1,16 @@
+server.name: kibana
+server.host: "0.0.0.0"
+
+# Connexion HTTP avec Elasticsearch
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Authentication
+elasticsearch.username: "kibana_system"
+# Password is provided through environment variable in docker-compose.yml
+
+# Disable SSL for Kibana initially
+server.ssl.enabled: false
+
+# Disable certain features to reduce load
+xpack.observabilityAIAssistant.enabled: false
+telemetry.enabled: false
