@@ -1,0 +1,24 @@
+server.name: kibana
+server.host: "0.0.0.0"
+
+# Connexion HTTP simple car Elasticsearch a SSL désactivé
+# Using hardcoded value instead of environment variable reference
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Utiliser l'utilisateur kibana_system spécifique requis par Kibana
+elasticsearch.username: "kibana_system"
+# Password is now provided through environment variable in docker-compose.yml
+# Kibana will automatically use the ELASTICSEARCH_PASSWORD env var
+
+# Clés d'encryption configurées via docker-compose environment
+# Kibana will automatically use these env vars:
+# - KIBANA_ENCRYPTION_KEY
+# - KIBANA_SECURITY_KEY
+# - KIBANA_REPORTING_KEY
+
+# Désactiver SSL côté Kibana
+server.ssl.enabled: false
+
+# Désactiver certaines fonctionnalités pour réduire la charge
+xpack.observabilityAIAssistant.enabled: false
+telemetry.enabled: false

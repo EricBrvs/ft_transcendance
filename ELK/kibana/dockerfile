@@ -1,0 +1,6 @@
+FROM docker.elastic.co/kibana/kibana:8.10.1
+
+COPY ./config/kibana.yml /usr/share/kibana/config/kibana.yml
+COPY ./tools/cert_gen.sh /docker-entrypoint.d/cert_gen.sh
+
+ENTRYPOINT [ "bash", "-c", "/docker-entrypoint.d/cert_gen.sh" ]
