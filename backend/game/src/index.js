@@ -4,10 +4,15 @@ import cors from '@fastify/cors'
 import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import dotenv from 'dotenv'
+import { Logger } from './logger.js';
 
 
 dotenv.config()
 
+// Initialize our custom logger
+const logger = new Logger({ serviceName: 'game' });
+
+// Use built-in Fastify logger for HTTP requests
 const fastify = Fastify({ logger: true })
 await fastify.register(cors)
 await fastify.register(jwt, {

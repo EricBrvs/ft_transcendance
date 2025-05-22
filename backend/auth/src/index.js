@@ -7,10 +7,14 @@ import { open } from 'sqlite'
 import dotenv from 'dotenv'
 import fastifyOauth2 from '@fastify/oauth2'
 import crypto from 'crypto';
-
+import { Logger } from './logger.js';
 
 dotenv.config()
 
+// Initialize our custom logger
+const logger = new Logger({ serviceName: 'auth' });
+
+// Use built-in Fastify logger for HTTP requests
 const fastify = Fastify({ logger: true })
 await fastify.register(cors)
 await fastify.register(jwt, {

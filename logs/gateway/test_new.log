@@ -1,0 +1,1 @@
+{"message":"New test log from gateway service", "timestamp":"2025-05-22T11:33:00.000Z", "level":"DEBUG", "request": {"path": "/api/games/active", "method": "GET", "ip": "192.168.1.100", "user_id": 24}}

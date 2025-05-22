@@ -1,0 +1,1 @@
+{"message":"New test log from auth service", "timestamp":"2025-05-22T11:30:00.000Z", "level":"INFO", "user": "test_user", "action": "login"}

@@ -1,0 +1,1 @@
+{"message":"New test log from game service", "timestamp":"2025-05-22T11:32:00.000Z", "level":"ERROR", "game_id": "G-123456", "player1": "user1", "player2": "user2", "error": "game_terminated_unexpectedly"}
