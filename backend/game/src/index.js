@@ -316,6 +316,20 @@ fastify.get('/tournament/user/:uuid', async (request, reply) => {
   }
 });
 
+fastify.delete('/internal/delete', async (request, reply) => {
+  if (request.headers['x-internal-key'] !== process.env.JWT_SECRET)
+    return reply.code(403).send({ error: 'Forbidden' });
+
+  const { uuid } = request.body;
+  try {
+    await db.run('DELETE FROM matchs WHERE player = ? OR guest = ? OR guest2 = ?', [uuid, uuid, uuid]);
+    await db.run('DELETE FROM tournaments WHERE host = ?', [uuid]);
+    reply.send({ deleted: true });
+  } catch (err) {
+    console.error('Game delete error:', err);
+    reply.code(500).send({ error: 'Internal server error' });
+  }
+});
 
 
 async function createMatch(player = null, guest = null, guest2 = null, tournament = null) {

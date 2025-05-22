@@ -278,6 +278,50 @@ fastify.get('/internal/lastseen/user/:uuid', async (req, reply) => {
   }
 });
 
+fastify.delete('/account', async (request, reply) => {
+  const authHeader = request.headers.authorization;
+  const token = authHeader?.split(' ')[1];
+  if (!token) return reply.code(401).send({ error: 'Unauthorized' });
+
+  let uuid;
+  try {
+    const payload = await fastify.jwt.verify(token);
+    uuid = payload.uuid;
+  } catch (err) {
+    console.error('JWT verification error:', err);
+    
+    return reply.code(401).send({ error: 'Invalid token' });
+  }
+
+  try {
+
+    await fetch(`${process.env.USER_URL}/internal/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-key': process.env.JWT_SECRET
+      },
+      body: JSON.stringify({ uuid })
+    });
+
+    await fetch(`${process.env.GAME_URL}/internal/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-key': process.env.JWT_SECRET
+      },
+      body: JSON.stringify({ uuid })
+    });
+    await db.run('DELETE FROM users WHERE uuid = ?', [uuid]);
+
+    reply.send({ status: 'account fully deleted', uuid });
+  } catch (err) {
+    console.error('Full account deletion failed:', err);
+    reply.code(500).send({ error: 'Account deletion failed' });
+  }
+});
+
+
 
 async function getUserUUIDFromJWT(request) {
   const authHeader = request.headers.authorization;

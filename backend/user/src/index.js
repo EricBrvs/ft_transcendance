@@ -460,6 +460,30 @@ fastify.get('/users', async (request, reply) => {
 });
 
 
+fastify.delete('/internal/delete', async (request, reply) => {
+  if (request.headers['x-internal-key'] !== process.env.JWT_SECRET)
+    return reply.code(403).send({ error: 'Forbidden' });
+
+  const { uuid } = request.body;
+
+  try {
+
+    await db.run(`
+      DELETE FROM friendships
+      WHERE requester_uuid = ? OR target_uuid = ?
+    `, [uuid, uuid]);
+
+    await db.run('DELETE FROM user_opts WHERE uuid = ?', [uuid]);
+
+    await db.run('DELETE FROM users WHERE uuid = ?', [uuid]);
+
+    reply.send({ deleted: true });
+  } catch (err) {
+    console.error('User delete error:', err);
+    reply.code(500).send({ error: 'Internal server error' });
+  }
+});
+
 
 
 
