@@ -69,7 +69,7 @@ fastify.post('/match', async (request, reply) => {
 
 fastify.put('/match/:uuid', async (request, reply) => {
   const { uuid } = request.params;
-  const { guest, score1, score2, finished, endtime } = request.body;
+  const { player, guest, guest2,score1, score2, finished, endtime } = request.body;
 
   try {
     const match = await db.get('SELECT * FROM matchs WHERE uuid = ?', [uuid]);
@@ -81,18 +81,10 @@ fastify.put('/match/:uuid', async (request, reply) => {
     const updates = [];
     const values = [];
 
-    if (guest !== undefined) {
-      if (!match.guest) {
-        updates.push('guest = ?');
-        values.push(guest);
-      } else if (!match.guest2) {
-        updates.push('guest2 = ?');
-        values.push(guest);
-      } else {
-        return reply.code(400).send({ error: 'Both guest and guest2 are already set' });
-      }
-    }
+    if (player !== undefined) updates.push('player = ?'), values.push(player);
 
+    if (guest !== undefined) updates.push('guest = ?'), values.push(guest);
+    if (guest2 !== undefined) updates.push('guest2 = ?'), values.push(guest2);
     if (score1 !== undefined) updates.push('score1 = ?'), values.push(score1);
     if (score2 !== undefined) updates.push('score2 = ?'), values.push(score2);
     if (finished !== undefined) updates.push('finished = ?'), values.push(finished);
