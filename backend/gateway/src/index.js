@@ -4,6 +4,7 @@ import jwt from '@fastify/jwt'
 import dotenv from 'dotenv'
 import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
+import cors from '@fastify/cors';
 
 dotenv.config()
 
@@ -20,6 +21,11 @@ await db.exec(`
 `)
 
 const fastify = Fastify({ logger: true })
+await fastify.register(cors, {
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+});
 await fastify.register(jwt, {
   secret: process.env.JWT_SECRET,
   sign: { expiresIn: '2h' }
