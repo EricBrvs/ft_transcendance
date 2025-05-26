@@ -32,10 +32,16 @@ await fastify.register(fastifyHttpProxy, {
   http2: false
 })
 
-// Proxy vers le service USER
 await fastify.register(fastifyHttpProxy, {
   upstream: process.env.USER_URL || 'http://user:9000',
   prefix: '/user',
+  rewritePrefix: '',
+  http2: false
+});
+
+await fastify.register(fastifyHttpProxy, {
+  upstream: process.env.GAME_URL || 'http://game:9000',
+  prefix: '/game',
   rewritePrefix: '',
   http2: false
 });
