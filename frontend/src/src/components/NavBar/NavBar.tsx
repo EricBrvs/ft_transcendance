@@ -1,10 +1,12 @@
-import React from 'react';
-import NavBarStyles from './NavBarStyles';
-import type { NavBarProps } from '../../types/NavBarProps';
-import ButtonSettings from '../ButtonSettings/ButtonSettings';
-import ButtonProfil from '../ButtonProfil/ButtonProfil';
+import NavBarStyles from "./NavBarStyles";
+import ButtonSettings from "../ButtonSettings/ButtonSettings";
+import ButtonProfil from "../ButtonProfil/ButtonProfil";
+import { useNavigate } from "react-router-dom";
+import type { NavBarProps } from "../../types/NavBarProps";
 
 const NavBar: React.FC<NavBarProps> = ({ onMenuClick }) => {
+	const navigate = useNavigate();
+
 	return (
 		<header className={NavBarStyles.container}>
 			<div className={NavBarStyles.content}>
@@ -28,11 +30,15 @@ const NavBar: React.FC<NavBarProps> = ({ onMenuClick }) => {
 					</button>
 				</div>
 				<div className={NavBarStyles.logoSection}>
-					<img src="/42_Logo.svg.png" alt="42 Logo" className={NavBarStyles.logo} />
+					<img
+						src="/42_Logo.svg.png"
+						alt="42 Logo"
+						className={NavBarStyles.logo}
+					/>
 				</div>
 				<div className={NavBarStyles.containerBtn}>
-					<ButtonSettings />
-					<ButtonProfil img="/jlorette.jpg" />
+					<ButtonSettings onClick={() => navigate("/settings")} />
+					<ButtonProfil onClick={() => navigate("/profile")} />
 				</div>
 			</div>
 		</header>

@@ -1,13 +1,18 @@
-import { Link, useLocation } from 'react-router-dom';
-import MenuStyles from './MenuStyles';
-import { useTranslation } from '../../context/TranslationContext';
-import { useSettings } from '../../context/SettingsContext';
-import { getSizeTextStyle } from '../../globalStyle';
+import MenuStyles from "./MenuStyles";
+import AddFriendModal from "../AddFriendModal/AddFriendModal";
+import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "../../context/TranslationContext";
+import { useSettings } from "../../context/SettingsContext";
+import { getSizeTextStyle } from "../../globalStyle";
+import { useLogout } from "../../hooks/useLogout";
+import { useState } from "react";
 
 const Menu: React.FC = () => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const { t } = useTranslation();
+	const handleLogout = useLogout();
+	const [isAddFriendModalOpen, setIsAddFriendModalOpen] = useState(false);
 
 	const isActive = (path: string) => {
 		return currentPath === path;
@@ -23,17 +28,74 @@ const Menu: React.FC = () => {
 			<nav className={MenuStyles.navigation}>
 				<ul className={MenuStyles.navList}>
 					<li className={`${MenuStyles.li}`}>
-						{isActive('/') && <div className={`${MenuStyles.indicator}`}></div>}
-						<Link to="/" className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}>
+						<button
+							onClick={() => setIsAddFriendModalOpen(true)}
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className={MenuStyles.navIcon}
 								fill="none"
 								viewBox="0 0 24 24"
-								stroke={isActive('/') ? '#00BABC' : '#9CA3AF'}
+								stroke="#9CA3AF"
 							>
 								<defs>
-									<filter id="homeShadow" x="-20%" y="-20%" width="140%" height="140%">
+									<filter
+										id="addFriendShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
+										<feDropShadow
+											dx="1"
+											dy="1"
+											stdDeviation="2"
+											floodOpacity="0.3"
+											floodColor="#000"
+										/>
+									</filter>
+								</defs>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 4v16m8-8H4"
+									filter="url(#addFriendShadow)"
+								/>
+							</svg>
+							<span className="text-gray-500 3xl:text-2xl">
+								{t("menu.addFriend")}
+							</span>
+						</button>
+					</li>
+					<li className={`${MenuStyles.li}`}>
+						{isActive("/") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className={MenuStyles.navIcon}
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke={isActive("/") ? "#00BABC" : "#9CA3AF"}
+							>
+								<defs>
+									<filter
+										id="homeShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
 										<feDropShadow
 											dx="1"
 											dy="1"
@@ -53,27 +115,42 @@ const Menu: React.FC = () => {
 							</svg>
 							<span
 								className={
-									isActive('/')
-										? 'text-gray-900 font-medium 3xl:text-2xl'
-										: 'text-gray-500 3xl:text-2xl'
+									isActive("/")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
 								}
 							>
-								{t('menu.home')}
+								{t("menu.home")}
 							</span>
 						</Link>
 					</li>
 					<li className={`${MenuStyles.li}`}>
-						{isActive('/profile') && <div className={`${MenuStyles.indicator}`}></div>}
-						<Link to="/profile" className={`${MenuStyles.navItem} pl-4 ${getSizeTextStyle(size_text)}`}>
+						{isActive("/profile") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/profile"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className={MenuStyles.navIcon}
 								fill="none"
 								viewBox="0 0 24 24"
-								stroke={isActive('/profile') ? '#00BABC' : '#9CA3AF'}
+								stroke={isActive("/profile") ? "#00BABC" : "#9CA3AF"}
 							>
 								<defs>
-									<filter id="profileShadow" x="-20%" y="-20%" width="140%" height="140%">
+									<filter
+										id="profileShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
 										<feDropShadow
 											dx="1"
 											dy="1"
@@ -93,27 +170,97 @@ const Menu: React.FC = () => {
 							</svg>
 							<span
 								className={
-									isActive('/profile')
-										? 'text-gray-900 font-medium 3xl:text-2xl'
-										: 'text-gray-500 3xl:text-2xl'
+									isActive("/profile")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
 								}
 							>
-								{t('menu.profile')}
+								{t("menu.profile")}
 							</span>
 						</Link>
 					</li>
 					<li className={`${MenuStyles.li}`}>
-						{isActive('/game') && <div className={`${MenuStyles.indicator}`}></div>}
-						<Link to="/game" className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}>
+						{isActive("/dashboard") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/dashboard"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className={MenuStyles.navIcon}
 								fill="none"
 								viewBox="0 0 24 24"
-								stroke={isActive('/game') ? '#00BABC' : '#9CA3AF'}
+								stroke={isActive("/dashboard") ? "#00BABC" : "#9CA3AF"}
 							>
 								<defs>
-									<filter id="gameShadow" x="-20%" y="-20%" width="140%" height="140%">
+									<filter
+										id="dashboardShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
+										<feDropShadow
+											dx="1"
+											dy="1"
+											stdDeviation="2"
+											floodOpacity="0.3"
+											floodColor="#000"
+										/>
+									</filter>
+								</defs>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+									filter="url(#dashboardShadow)"
+								/>
+							</svg>
+							<span
+								className={
+									isActive("/dashboard")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
+								}
+							>
+								{t("menu.dashboard")}
+							</span>
+						</Link>
+					</li>
+					<li className={`${MenuStyles.li}`}>
+						{isActive("/game") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/game"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className={MenuStyles.navIcon}
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke={isActive("/game") ? "#00BABC" : "#9CA3AF"}
+							>
+								<defs>
+									<filter
+										id="gameShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
 										<feDropShadow
 											dx="1"
 											dy="1"
@@ -140,17 +287,192 @@ const Menu: React.FC = () => {
 							</svg>
 							<span
 								className={
-									isActive('/game')
-										? 'text-gray-900 font-medium 3xl:text-2xl'
-										: 'text-gray-500 3xl:text-2xl'
+									isActive("/game")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
 								}
 							>
-								{t('menu.game')}
+								{t("menu.game")}
+							</span>
+						</Link>
+					</li>
+					<li className={`${MenuStyles.li}`}>
+						{isActive("/friends") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/friends"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className={MenuStyles.navIcon}
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke={isActive("/friends") ? "#00BABC" : "#9CA3AF"}
+							>
+								<defs>
+									<filter
+										id="friendsShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
+										<feDropShadow
+											dx="1"
+											dy="1"
+											stdDeviation="2"
+											floodOpacity="0.3"
+											floodColor="#000"
+										/>
+									</filter>
+								</defs>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+									filter="url(#friendsShadow)"
+								/>
+							</svg>
+							<span
+								className={
+									isActive("/friends")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
+								}
+							>
+								{t("menu.friends")}
+							</span>
+						</Link>
+					</li>
+					<li className={`${MenuStyles.li}`}>
+						{isActive("/tournaments") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/tournaments"
+							className={`${MenuStyles.navItem} ${getSizeTextStyle(size_text)}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className={MenuStyles.navIcon}
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke={isActive("/tournaments") ? "#00BABC" : "#9CA3AF"}
+							>
+								<defs>
+									<filter
+										id="tournamentsShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
+										<feDropShadow
+											dx="1"
+											dy="1"
+											stdDeviation="2"
+											floodOpacity="0.3"
+											floodColor="#000"
+										/>
+									</filter>
+								</defs>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M5 5h14c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-1.5l-1.5 8h-8l-1.5-8H5c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1zm7 .5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"
+									filter="url(#tournamentsShadow)"
+								/>
+							</svg>
+							<span
+								className={
+									isActive("/tournaments")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
+								}
+							>
+								{t("menu.tournaments")}
+							</span>
+						</Link>
+					</li>
+					<li className={`${MenuStyles.li}`}>
+						{isActive("/settings") && (
+							<div
+								className={`${MenuStyles.indicator}`}
+								tabIndex={-1}
+								aria-hidden="true"
+							></div>
+						)}
+						<Link
+							to="/settings"
+							className={`${MenuStyles.navItem} pl-4 ${getSizeTextStyle(size_text)}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className={MenuStyles.navIcon}
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke={isActive("/settings") ? "#00BABC" : "#9CA3AF"}
+							>
+								<defs>
+									<filter
+										id="settingsShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
+										<feDropShadow
+											dx="1"
+											dy="1"
+											stdDeviation="2"
+											floodOpacity="0.3"
+											floodColor="#000"
+										/>
+									</filter>
+								</defs>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+									filter="url(#settingsShadow)"
+								/>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+									filter="url(#settingsShadow)"
+								/>
+							</svg>
+							<span
+								className={
+									isActive("/settings")
+										? "text-gray-900 font-medium 3xl:text-2xl"
+										: "text-gray-500 3xl:text-2xl"
+								}
+							>
+								{t("menu.settings")}
 							</span>
 						</Link>
 					</li>
 					<li className="relative">
-						<Link to="/logout" className={`${MenuStyles.logoutButton} pl-4 ${getSizeTextStyle(size_text)}`}>
+						<button
+							onClick={handleLogout}
+							className={`${MenuStyles.logoutButton} pl-4 ${getSizeTextStyle(size_text)}`}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className={MenuStyles.navIcon}
@@ -159,7 +481,13 @@ const Menu: React.FC = () => {
 								stroke="#FF0000"
 							>
 								<defs>
-									<filter id="logoutShadow" x="-20%" y="-20%" width="140%" height="140%">
+									<filter
+										id="logoutShadow"
+										x="-20%"
+										y="-20%"
+										width="140%"
+										height="140%"
+									>
 										<feDropShadow
 											dx="1"
 											dy="1"
@@ -177,11 +505,15 @@ const Menu: React.FC = () => {
 									filter="url(#logoutShadow)"
 								/>
 							</svg>
-							<span className="3xl:text-2xl">{t('menu.logout')}</span>
-						</Link>
+							<span className="3xl:text-2xl">{t("menu.logout")}</span>
+						</button>
 					</li>
 				</ul>
 			</nav>
+			<AddFriendModal
+				isOpen={isAddFriendModalOpen}
+				onClose={() => setIsAddFriendModalOpen(false)}
+			/>
 		</div>
 	);
 };

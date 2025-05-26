@@ -1,17 +1,32 @@
-import Card from '../../Card/Card';
-import { useTranslation } from '../../../context/TranslationContext';
-import globalStyle from '../../../globalStyle';
-import { Link } from 'react-router-dom';
-import BugerMenuStyles from '../../BugerMenu/BugerMenuStyles';
+import Card from "../../Card/Card";
+import BugerMenuStyles from "../../BugerMenu/BugerMenuStyles";
+import globalStyle from "../../../globalStyle";
+import { useTranslation } from "../../../context/TranslationContext";
+import { useLogout } from "../../../hooks/useLogout";
+import { useUserContext } from "../../../context/UserContext";
 
-export default function AccountCard() {
+const AccountCard: React.FC = () => {
 	const { t } = useTranslation();
+	const handleLogout = useLogout();
+	const { deleteAccount } = useUserContext();
+
+	const handleDeleteAccount = async () => {
+		if (window.confirm(t("profile.confirmDelete"))) {
+			const success = await deleteAccount();
+			if (!success) {
+				alert(t("profile.deleteError"));
+			}
+		}
+	};
 
 	return (
 		<Card>
-			<p className={globalStyle.span}>{t('profile.account')}</p>
+			<p className={globalStyle.span}>{t("profile.account")}</p>
 			<div className={globalStyle.separator}></div>
-			<Link to="/logout" className={`${BugerMenuStyles.logoutButton} pl-4`}>
+			<button
+				onClick={handleLogout}
+				className={`${BugerMenuStyles.logoutButton} pl-4`}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					className={BugerMenuStyles.navIcon}
@@ -20,8 +35,20 @@ export default function AccountCard() {
 					stroke="#FF0000"
 				>
 					<defs>
-						<filter id="logoutShadow" x="-20%" y="-20%" width="140%" height="140%">
-							<feDropShadow dx="1" dy="1" stdDeviation="2" floodOpacity="0.3" floodColor="#000" />
+						<filter
+							id="logoutShadow"
+							x="-20%"
+							y="-20%"
+							width="140%"
+							height="140%"
+						>
+							<feDropShadow
+								dx="1"
+								dy="1"
+								stdDeviation="2"
+								floodOpacity="0.3"
+								floodColor="#000"
+							/>
 						</filter>
 					</defs>
 					<path
@@ -32,9 +59,12 @@ export default function AccountCard() {
 						filter="url(#logoutShadow)"
 					/>
 				</svg>
-				<span className={globalStyle.spanAlert}>{t('profile.logout')}</span>
-			</Link>
-			<Link to="/delete-account" className={`${BugerMenuStyles.logoutButton} pl-4 mt-2`}>
+				<span className={globalStyle.spanAlert}>{t("profile.logout")}</span>
+			</button>
+			<button
+				onClick={handleDeleteAccount}
+				className={`${BugerMenuStyles.logoutButton} pl-4 mt-2`}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					className={BugerMenuStyles.navIcon}
@@ -43,8 +73,20 @@ export default function AccountCard() {
 					stroke="#FF0000"
 				>
 					<defs>
-						<filter id="deleteShadow" x="-20%" y="-20%" width="140%" height="140%">
-							<feDropShadow dx="1" dy="1" stdDeviation="2" floodOpacity="0.3" floodColor="#000" />
+						<filter
+							id="deleteShadow"
+							x="-20%"
+							y="-20%"
+							width="140%"
+							height="140%"
+						>
+							<feDropShadow
+								dx="1"
+								dy="1"
+								stdDeviation="2"
+								floodOpacity="0.3"
+								floodColor="#000"
+							/>
 						</filter>
 					</defs>
 					<path
@@ -55,8 +97,10 @@ export default function AccountCard() {
 						filter="url(#deleteShadow)"
 					/>
 				</svg>
-				<span className={globalStyle.spanAlert}>{t('profile.delete')}</span>
-			</Link>
+				<span className={globalStyle.spanAlert}>{t("profile.delete")}</span>
+			</button>
 		</Card>
 	);
-}
+};
+
+export default AccountCard;

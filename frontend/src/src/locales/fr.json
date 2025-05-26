@@ -1,4 +1,41 @@
 {
+	"search": {
+		"placeholder": "Rechercher un utilisateur...",
+		"noResults": "Aucun utilisateur trouvé",
+		"enterQuery": "Entrez un nom pour rechercher un utilisateur"
+	},
+	"common": {
+		"cancel": "Annuler",
+		"save": "Enregistrer"
+	},
+	"loading": "Chargement...",
+	"addFriend": "Ajouter",
+	"removeFriend": "Supprimer",
+	"pendingRequest": "Demande envoyée",
+	"acceptRequest": "Accepter",
+	"friends": {
+		"title": "Mes Amis",
+		"myFriends": "Mes amis",
+		"requests": "Demandes",
+		"noFriends": "Vous n'avez pas encore d'amis",
+		"noRequests": "Aucune demande d'ami en attente",
+		"online": "En ligne",
+		"offline": "Hors ligne",
+		"sentYouRequest": "Vous a envoyé une demande d'ami",
+		"decline": "Refuser"
+	},
+	"error": {
+		"searchUsers": "Erreur lors de la recherche d'utilisateurs",
+		"friendRequest": "Erreur lors de l'envoi de la demande d'ami",
+		"unknown": "Une erreur inconnue est survenue"
+	},
+	"notifications": {
+		"friendRequestSent": "Demande d'ami envoyée avec succès",
+		"friendRequestAccepted": "Demande d'ami acceptée",
+		"friendRequestDeclined": "Demande d'ami refusée",
+		"friendRemoved": "Ami supprimé",
+		"error": "Une erreur s'est produite"
+	},
 	"accessibility": {
 		"title": "Accessibilité",
 		"text_size": "Taille du texte",
@@ -8,6 +45,36 @@
 		"previewText": "Aperçu du texte",
 		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée"
 	},
+	"tournament": {
+		"title": "Tournoi",
+		"round": "Round",
+		"matchId": "ID du match",
+		"noTournaments": "Aucun tournoi disponible"
+	},
+	"dashboard": {
+		"title": "Tableau de bord",
+		"statistics": "Statistiques",
+		"scoreEvolution": "Évolution des scores",
+		"winLossRatio": "Ratio Victoires/Défaites",
+		"you": "Vous",
+		"opponents": "Adversaires",
+		"total": "Total",
+		"matches": "matchs",
+		"wins": "victoires",
+		"losses": "défaites",
+		"vsAI": "VS IA",
+		"vsPlayers": "VS Joueurs",
+		"score": "Score",
+		"winRate": "Taux de victoire",
+		"lossRate": "Taux de défaite",
+		"versus": "contre",
+		"noData": "Aucune donnée disponible",
+		"dateRange": "Période",
+		"lastWeek": "7 derniers jours",
+		"lastMonth": "30 derniers jours",
+		"allTime": "Tout",
+		"noGames": "Aucune partie trouvée"
+	},
 	"auth": {
 		"login": {
 			"title": "Connexion",
@@ -16,7 +83,9 @@
 			"loginButton": "Se connecter",
 			"noAccount": "Vous n'avez pas de compte ?",
 			"googleLogin": "Se connecter avec Google",
-			"emailError": "Veuillez entrer une adresse email valide"
+			"emailError": "Veuillez entrer une adresse email valide",
+			"invalidCredentials": "Email ou mot de passe incorrect",
+			"networkError": "Erreur de connexion au serveur"
 		},
 		"signup": {
 			"title": "Inscription",
@@ -33,15 +102,28 @@
 			"passwordErrorSpecial": "un caractère spécial",
 			"passwordErrorNumber": "un chiffre",
 			"passwordErrorLength": "au moins 8 caractères",
-			"passwordsNotMatch": "Les mots de passe ne correspondent pas"
+			"passwordsNotMatch": "Les mots de passe ne correspondent pas",
+			"emailAlreadyUsed": "Cet email est déjà utilisé",
+			"networkError": "Erreur de connexion au serveur"
 		}
+	},
+	"notFound": {
+		"title": "Page non trouvée",
+		"description": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+		"backHome": "Retour à l'accueil"
 	},
 	"menu": {
 		"home": "Accueil",
 		"profile": "Profil",
+		"dashboard": "Tableau de bord",
 		"game": "Jeu",
+		"tournaments": "Tournois",
 		"logout": "Déconnexion",
-		"test_text_size": "Test Taille Texte"
+		"settings": "Paramètres",
+		"test_text_size": "Test Taille Texte",
+		"addFriend": "Ajouter un ami",
+		"friends": "Amis",
+		"close": "Fermer"
 	},
 	"home": {
 		"welcom": "Bienvenue sur",
@@ -53,10 +135,30 @@
 		"newGame": "Nouvelle partie",
 		"ai": "VS IA",
 		"player": "VS joueur",
+		"aivs": "VS IA",
+		"playervs": "VS joueur",
 		"start": "Lancer",
 		"history": "Historique",
 		"gameSettings": "Paramètres de jeu",
-		"custom": "Personnaliser"
+		"custom": "Personnaliser",
+		"comingSoon": "Prochainement"
+	},
+	"settings": {
+		"yourPicture": "Votre photo",
+		"uploadNewProfilPicture": "Télécharger une nouvelle photo de profil",
+		"changeAvatar": "Changer d'avatar",
+		"updateYourPicture": "Mettre à jour votre photo",
+		"uploadImage": "Télécharger une image",
+		"imageUrl": "URL de l'image",
+		"chooseImage": "Choisir une image",
+		"chooseAnotherImage": "Choisir une autre image",
+		"enterImageUrl": "Entrer l'URL de l'image",
+		"invalidImageFormat": "Format d'image invalide. Utilisez JPEG, JPG, PNG ou GIF",
+		"imageTooLarge": "L'image est trop volumineuse (max 5 Mo)",
+		"payloadTooLarge": "L'image est trop volumineuse pour le serveur. Veuillez choisir une image plus petite ou la compresser",
+		"noImageSelected": "Aucune image sélectionnée",
+		"avatarUpdateFailed": "Échec de la mise à jour de l'avatar",
+		"invalidImageUrl": "URL d'image invalide"
 	},
 	"profile": {
 		"account": "Compte",
@@ -71,15 +173,64 @@
 		"language": "Langue",
 		"accessibility": "Accessibilité",
 		"previewText": "Aperçu du texte",
-		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée"
+		"sampleText": "Ceci est un exemple de texte pour voir la taille sélectionnée",
+		"friendProfile": "Profil de",
+		"enter_new_username": "Entrer un nouveau nom d'utilisateur",
+		"edit_email": "Modifier l'email",
+		"enter_new_email": "Entrer un nouvel email",
+		"enter_old_password": "Entrer l'ancien mot de passe",
+		"enter_new_password": "Entrer le nouveau mot de passe",
+		"confirm_new_password": "Confirmer le nouveau mot de passe",
+		"history": "historique"
 	},
 	"game": {
 		"gameCustom": "Jeu personnalisé"
 	},
+	"tournaments": {
+		"matchError": "Match erreur",
+		"title": "Tournois",
+		"winnerMessage": "Félicitations à {winner} pour avoir remporté le tournoi !",
+		"createTournament": "Créer un tournoi",
+		"players": "joueurs",
+		"playerName": "Nom du joueur",
+		"minPlayersError": "Il faut au moins {0} joueurs pour un tournoi de {1} joueurs",
+		"duplicateNameError": "Ce nom est déjà utilisé par un autre joueur",
+		"createError": "Impossible de créer le tournoi : certains joueurs ont le même nom",
+		"createButton": "Créer le tournoi",
+		"creating": "Création en cours...",
+		"tournamentTree": "Arbre du tournoi",
+		"copyId": "Copier l'ID",
+		"yourTournaments": "Vos tournois",
+		"status": "Statut",
+		"finished": "Terminé",
+		"inProgress": "En cours",
+		"active": "Actif",
+		"activeTournament": "Votre tournoi en cours",
+		"host": "Hôte",
+		"you": "Vous",
+		"matches": "Matchs",
+		"winner": "Gagnant",
+		"viewBracket": "Voir l'arbre du tournoi",
+		"noMatches": "Pas de matchs disponibles",
+		"idCopied": "ID copié dans le presse-papier",
+		"loading": "Chargement...",
+		"round": "Round",
+		"final": "Finale",
+		"semifinal": "Demi-finale",
+		"quarterfinal": "Quart de finale",
+		"mobileView": "Pour une meilleure expérience, faites défiler pour voir tous les rounds du tournoi",
+		"cancelTournament": "Annuler le tournoi",
+		"cancelConfirmation": "Êtes-vous sûr de vouloir annuler ce tournoi ? Cette action est irréversible.",
+		"cancelSuccess": "Le tournoi a été annulé avec succès",
+		"cancelError": "Une erreur est survenue lors de l'annulation du tournoi",
+		"activeTournaments": "Tournois actifs",
+		"finishedTournaments": "Tournois terminés",
+		"noTournaments": "Aucun tournoi trouvé"
+	},
 	"pong": {
 		"startGame": "Commencer la partie",
-		"resumeGame": "Reprendre la partie",
-		"quitGame": "Quitter le jeu",
+		"resumeGame": "Reprendre",
+		"quitGame": "Quitter",
 		"backToMenu": "Retour au menu",
 		"changeView": "Changer de vue",
 		"view": "Vue",
@@ -98,7 +249,28 @@
 		"mobileControls": "Commandes tactiles: Utilisez les flèches en bas de l'écran | Bouton central pour mettre en pause",
 		"editViewMode": "Mode Édition Vue Activé (V pour désactiver)",
 		"up": "Haut",
-		"down": "Bas"
+		"down": "Bas",
+		"gameSettings": "Paramètres du jeu",
+		"plateauColor": "Couleur du plateau",
+		"paddleColor": "Couleur des raquettes",
+		"ballSpeed": "Vitesse de la balle",
+		"colorDefault": "Par défaut",
+		"colorBlue": "Bleu",
+		"colorRed": "Rouge",
+		"colorGreen": "Vert",
+		"colorPurple": "Violet",
+		"speedNormal": "Normale",
+		"speedFast": "Rapide",
+		"speedTurbo": "Turbo",
+		"playAgain": "Rejouer",
+		"tournamentMatch": "Match de tournoi",
+		"matchId": "ID du match",
+		"enterMatchId": "Entrer l'ID du match",
+		"startTournamentMatch": "Commencer le match",
+		"cancel": "Annuler",
+		"matchError": "Erreur lors du démarrage du match de tournoi",
+		"matchNotFound": "Match de tournoi non trouvé",
+		"matchAlreadyFinished": "Ce match est déjà terminé",
+		"matchCompleted": "Match de tournoi terminé avec succès"
 	}
 }
-

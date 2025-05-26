@@ -1,40 +1,62 @@
-import { useTranslation } from '../../../context/TranslationContext';
-import { useSettings } from '../../../context/SettingsContext';
-import globalStyle from '../../../globalStyle';
-import Card, { Space } from '../../Card/Card';
-import AccessibilityCardStyle from './AccessibilityCardStyle';
-import { useEffect, useState } from 'react';
+import AccessibilityCardStyle from "./AccessibilityCardStyle";
+import Card, { Space } from "../../Card/Card";
+import { useTranslation } from "../../../context/TranslationContext";
+import { useSettings } from "../../../context/SettingsContext";
+import globalStyle from "../../../globalStyle";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export default function AccessibilityCard() {
+const AccessibilityCard: React.FC = () => {
 	const { t } = useTranslation();
 	const { size_text, setSizeText } = useSettings();
-
 	const [localSizeText, setLocalSizeText] = useState(size_text);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	useEffect(() => {
 		setLocalSizeText(size_text);
 	}, [size_text]);
 
 	useEffect(() => {
-		const validSizes = [20, 26, 30];
+		const validSizes = [18, 22, 26];
 		if (!validSizes.includes(size_text)) {
-			setSizeText(26);
+			setSizeText(22);
 		}
 	}, [size_text, setSizeText]);
 
+	const debouncedSetSizeText = useCallback(
+		(size: number) => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+			timeoutRef.current = setTimeout(() => {
+				setSizeText(size);
+				timeoutRef.current = null;
+			}, 300);
+		},
+		[setSizeText],
+	);
+
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
+
 	const handleSizeChange = (size: number) => {
-		setSizeText(size);
+		setLocalSizeText(size);
+		debouncedSetSizeText(size);
 	};
 
 	return (
 		<Card>
 			<div className={globalStyle.row}>
-				<span className={globalStyle.span}>{t('accessibility.title')}</span>
+				<span className={globalStyle.span}>{t("accessibility.title")}</span>
 			</div>
 			<div className={globalStyle.separator}></div>
 
 			<div className={globalStyle.row}>
-				<p>{t('accessibility.text_size')}</p>
+				<p>{t("accessibility.text_size")}</p>
 				<Space />
 				<div className={AccessibilityCardStyle.selectContainer}>
 					<select
@@ -46,9 +68,9 @@ export default function AccessibilityCard() {
 							handleSizeChange(newSize);
 						}}
 					>
-						<option value="20">{t('accessibility.small')}</option>
-						<option value="26">{t('accessibility.normal')}</option>
-						<option value="30">{t('accessibility.large')}</option>
+						<option value="18">{t("accessibility.small")}</option>
+						<option value="22">{t("accessibility.normal")}</option>
+						<option value="26">{t("accessibility.large")}</option>
 					</select>
 					<div className={AccessibilityCardStyle.chevronContainer}>
 						<svg
@@ -69,14 +91,18 @@ export default function AccessibilityCard() {
 			</div>
 
 			<div className={AccessibilityCardStyle.previewContainer}>
-				<p className={AccessibilityCardStyle.previewText}>{t('accessibility.previewText')}:</p>
+				<p className={AccessibilityCardStyle.previewText}>
+					{t("accessibility.previewText")}:
+				</p>
 				<div
 					className={AccessibilityCardStyle.sampleTextContainer}
 					style={{ fontSize: `${localSizeText}px` }}
 				>
-					{t('accessibility.sampleText')}
+					{t("accessibility.sampleText")}
 				</div>
 			</div>
 		</Card>
 	);
-}
+};
+
+export default AccessibilityCard;
