@@ -5,8 +5,6 @@ services:
     image: gateway
     ports:
       - "9443:443"
-    environment:
-      - JWT_SECRET=your_jwt_secret_key
     depends_on:
       - auth
       - user
@@ -37,14 +35,14 @@ services:
       - ./backend/game:/app
       - /app/node_modules
     restart: always
-#   frontend:
-#     build: ./frontend
-#     volumes:
-#       - ./frontend/src:/app/src
-#     ports:
-#       - "3000:3000"
-#     depends_on:
-#       - auth
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "5173:80"
+    depends_on:
+      - gateway
   logstash:
     build: ./ELK/logstash
     volumes:
