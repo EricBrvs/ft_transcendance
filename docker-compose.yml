@@ -40,11 +40,15 @@ services:
     image: frontend
     build: ./frontend
     volumes:
-      - ./frontend/src:/app/src
+      - ./certs-generated/frontend:/etc/nginx/certs:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "5173:80"
+      - "443:443"
+      - "80:80"
     depends_on:
       - gateway
+    networks:
+      - app-network
   logstash:
     build: ./ELK/logstash
     volumes:
@@ -126,4 +130,6 @@ volumes:
 
 networks:
   ELK:
+    driver: bridge
+  app-network:
     driver: bridge
