@@ -3,3 +3,5 @@ backend/*/node_modules
 backend/*/src/data/*.db
 .env
 ELK/logstash/.env
+*.crt
+*.key
