@@ -55,3 +55,17 @@ Si vous avez exécuté `docker compose down -v` ou supprimé les volumes:
 - Elasticsearch: https://localhost:9200 (utilisateur: elastic, mot de passe: `ELASTIC_PASSWORD` défini dans .env)
 
 > **Note:** Les services utilisent maintenant HTTPS avec des certificats auto-signés. Vous devrez peut-être accepter les certificats dans votre navigateur lors de la première connexion.
+
+### Résolution des problèmes d'authentification
+
+Si vous rencontrez des erreurs d'authentification entre Kibana et Elasticsearch (visible dans les logs avec "Authentication of [kibana_system] was terminated by realm [reserved]"), vérifiez que:
+
+1. La variable d'environnement dans `.env` est bien nommée `KIBANA_SYSTEM_PASSWORD` et non `KIBANA_PASSWORD`
+2. Vous pouvez réinitialiser le mot de passe de l'utilisateur `kibana_system` avec:
+   ```bash
+   docker exec elasticsearch curl -s -k -X POST -u elastic:4242 \
+     "https://localhost:9200/_security/user/kibana_system/_password" \
+     -H "Content-Type: application/json" \
+     -d '{"password": "FB_2WU2-pAsFBRZGpncA"}'
+   ```
+3. Redémarrez ensuite Kibana: `docker restart kibana`
