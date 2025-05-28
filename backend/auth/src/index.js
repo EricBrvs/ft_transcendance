@@ -213,7 +213,7 @@ fastify.post('/logout', async (req, reply) => {
 })
 
 
-/* 
+/*
 
   INTERNAL ROUTES
   ROUTE FOR INTERNAL USE ONLY (Can't be exposed to the public)
@@ -293,7 +293,7 @@ fastify.delete('/account', async (request, reply) => {
     uuid = payload.uuid;
   } catch (err) {
     console.error('JWT verification error:', err);
-    
+
     return reply.code(401).send({ error: 'Invalid token' });
   }
 

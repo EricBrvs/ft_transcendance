@@ -35,13 +35,14 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 				const token = getJwtToken();
 
 				const response = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/user/${uuid}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/user/${uuid}`,
 					{
 						method: "GET",
 						headers: {
 							"Content-Type": "application/json",
 							Authorization: `Bearer ${token}`,
 						},
+
 					},
 				);
 
@@ -82,7 +83,7 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 				};
 
 				const response = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament`,
 					{
 						method: "POST",
 						headers: {
@@ -90,6 +91,7 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 							Authorization: `Bearer ${token}`,
 						},
 						body: JSON.stringify(tournamentData),
+
 					},
 				);
 
@@ -120,13 +122,14 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 				const token = getJwtToken();
 
 				const response = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/${id}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/${id}`,
 					{
 						method: "GET",
 						headers: {
 							"Content-Type": "application/json",
 							Authorization: `Bearer ${token}`,
 						},
+
 					},
 				);
 
@@ -152,13 +155,14 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${id}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${id}`,
 				{
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${token}`,
 					},
+
 				},
 			);
 
@@ -189,7 +193,7 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 				}
 
 				const response = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/${tournamentId}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/tournament/${tournamentId}`,
 					{
 						method: "PUT",
 						headers: {
@@ -197,6 +201,7 @@ export const TournamentProvider: React.FC<TournamentProviderProps> = ({
 							Authorization: `Bearer ${token}`,
 						},
 						body: JSON.stringify(data),
+
 					},
 				);
 

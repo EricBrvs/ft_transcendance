@@ -44,7 +44,7 @@ export default function ProfileFriend() {
 				}
 
 				const profileResponse = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${uuid}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${uuid}`,
 					{
 						method: "GET",
 						headers: {
@@ -65,7 +65,7 @@ export default function ProfileFriend() {
 
 				try {
 					const matchesResponse = await customFetch(
-						`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${uuid}`,
+						`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${uuid}`,
 						{
 							method: "GET",
 							headers: {

@@ -36,13 +36,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${uuid}`,
 				{
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
+
 				},
 			);
 
@@ -90,7 +91,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match`,
 				{
 					method: "POST",
 					headers: {
@@ -98,6 +99,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(params),
+
 				},
 			);
 
@@ -138,7 +140,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 			}
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${matchUuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${matchUuid}`,
 				{
 					method: "PUT",
 					headers: {
@@ -146,6 +148,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(params),
+
 				},
 			);
 

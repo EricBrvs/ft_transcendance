@@ -48,7 +48,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 		try {
 			const token = getJwtToken();
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/options`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/options`,
 				{
 					method: "PUT",
 					headers: {
@@ -56,7 +56,6 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(options),
-					credentials: "include",
 				},
 			);
 			if (!response.ok) {

@@ -29,7 +29,7 @@ const ResultsCard: React.FC<ResultsCardProps> = ({ friendUuid }) => {
 				if (!token) return;
 
 				const matchesResponse = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${friendUuid}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/user/${friendUuid}`,
 					{
 						method: "GET",
 						headers: {
@@ -46,7 +46,7 @@ const ResultsCard: React.FC<ResultsCardProps> = ({ friendUuid }) => {
 				}
 
 				const profileResponse = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${friendUuid}`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${friendUuid}`,
 					{
 						method: "GET",
 						headers: {

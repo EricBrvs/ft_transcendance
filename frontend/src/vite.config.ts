@@ -13,9 +13,10 @@ export default defineConfig(({ mode }) => {
 		server: {
 			proxy: {
 				"/api": {
-					target: `http://localhost:${backendPort}`,
+					target: `https://localhost:${backendPort}`,
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, ""),
+					secure: false, // Pour accepter les certificats auto-signés
 				},
 			},
 		},

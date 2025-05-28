@@ -1,10 +1,20 @@
+import { getApiBaseUrl } from "./apiBaseUrl";
+
 export async function customFetch(
 	url: string,
 	options: RequestInit,
 ): Promise<Response> {
-	const response = await fetch(url, options);
+	if (url.startsWith("http://localhost")) {
+		const path = new URL(url).pathname;
+		url = `${getApiBaseUrl()}${path}`;
+	}
 
-	// Gérer uniquement les erreurs 401 pour la redirection
+	const fetchOptions = {
+		...options,
+	};
+
+	const response = await fetch(url, fetchOptions);
+
 	if (response.status === 401) {
 		if (
 			typeof window !== "undefined" &&

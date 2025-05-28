@@ -5,6 +5,7 @@ import LoginStyle from "./LoginStyle";
 import globalStyle from "../../globalStyle";
 import { useTranslation } from "../../context/TranslationContext";
 import { customFetch } from "../../utils/customFetch";
+import { getApiBaseUrl } from "../../utils/apiBaseUrl";
 
 export default function Login() {
 	const { t } = useTranslation();
@@ -30,19 +31,17 @@ export default function Login() {
 		}
 
 		try {
-			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						email,
-						password,
-					}),
+			const response = await customFetch(`${getApiBaseUrl()}/auth/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
 				},
-			);
+				body: JSON.stringify({
+					email,
+					password,
+				}),
+
+			});
 
 			const data = await response.json();
 
@@ -76,7 +75,7 @@ export default function Login() {
 	}, []);
 
 	const handleGoogleLogin = () => {
-		window.location.href = `http://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/google/login`;
+		window.location.href = `${getApiBaseUrl()}/auth/google/login`;
 	};
 
 	return (

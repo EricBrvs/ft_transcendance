@@ -37,13 +37,14 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends`,
 				{
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
+
 				},
 			);
 
@@ -71,7 +72,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
 				{
 					method: "POST",
 					headers: {
@@ -79,6 +80,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({}),
+
 				},
 			);
 
@@ -101,7 +103,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
 				{
 					method: "PUT",
 					headers: {
@@ -109,6 +111,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ action: "accept" }),
+
 				},
 			);
 
@@ -135,7 +138,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
 				{
 					method: "PUT",
 					headers: {
@@ -143,6 +146,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ action: "decline" }),
+
 				},
 			);
 
@@ -169,7 +173,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/friends/${uuid}`,
 				{
 					method: "DELETE",
 					headers: {
@@ -177,6 +181,7 @@ export const FriendProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({}),
+
 				},
 			);
 
