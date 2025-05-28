@@ -147,7 +147,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				"`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update",
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
 				{
 					method: "PUT",
 					headers: {
@@ -183,7 +183,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				"`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update",
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
 				{
 					method: "PUT",
 					headers: {
