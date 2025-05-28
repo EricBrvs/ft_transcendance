@@ -145,7 +145,7 @@ const SettingsCard: React.FC = () => {
 			try {
 				const token = getJwtToken();
 				const response = await customFetch(
-					`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/update`,
+					`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/update`,
 					{
 						method: "PUT",
 						headers: {
@@ -156,6 +156,7 @@ const SettingsCard: React.FC = () => {
 							new_password: newPassword,
 							old_password: oldPassword,
 						}),
+
 					},
 				);
 

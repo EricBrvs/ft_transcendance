@@ -110,13 +110,14 @@ const Friends = () => {
 			}
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${uuid}`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/${uuid}`,
 				{
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
+
 				},
 			);
 

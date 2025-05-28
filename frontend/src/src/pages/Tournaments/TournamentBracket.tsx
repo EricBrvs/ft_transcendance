@@ -251,7 +251,7 @@ const TournamentBracket: React.FC = () => {
 							try {
 								const token = getJwtToken();
 								await customFetch(
-									`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${nextRoundMatch.uuid}`,
+									`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${nextRoundMatch.uuid}`,
 									{
 										method: "PUT",
 										headers: {
@@ -333,7 +333,7 @@ const TournamentBracket: React.FC = () => {
 							try {
 								const token = getJwtToken();
 								await customFetch(
-									`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${nextMatch.uuid}`,
+									`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/game/match/${nextMatch.uuid}`,
 									{
 										method: "PUT",
 										headers: {

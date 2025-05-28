@@ -43,13 +43,14 @@ const AddFriendModal: React.FC<AddFriendModalProps> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/users`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/users`,
 				{
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
+
 				},
 			);
 

@@ -5,6 +5,12 @@ import dotenv from 'dotenv'
 import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import cors from '@fastify/cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config()
 
@@ -19,8 +25,13 @@ await db.exec(`
     revoked_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `)
-
-const fastify = Fastify({ logger: true })
+const fastify = Fastify({
+  logger: true,
+  https: {
+    key: fs.readFileSync(path.join(__dirname, '../certs/key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, '../certs/cert.pem'))
+  }
+});
 await fastify.register(cors, {
   origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

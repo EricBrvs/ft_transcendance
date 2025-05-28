@@ -49,13 +49,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			}
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/me`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/me`,
 				{
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "application/json",
 					},
+
 				},
 			);
 
@@ -116,7 +117,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
 				{
 					method: "PUT",
 					headers: {
@@ -124,6 +125,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ username }),
+
 				},
 			);
 
@@ -145,7 +147,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
 				{
 					method: "PUT",
 					headers: {
@@ -153,6 +155,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ email }),
+
 				},
 			);
 
@@ -180,7 +183,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
+				`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
 				{
 					method: "PUT",
 					headers: {
@@ -188,6 +191,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ avatar: finalAvatar }),
+
 				},
 			);
 
@@ -209,7 +213,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 			const token = getJwtToken();
 
 			const response = await customFetch(
-				`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/account`,
+				"`https://localhost:${import.meta.env.VITE_BACKEND_PORT}/auth/account",
 				{
 					method: "DELETE",
 					headers: {
@@ -217,6 +221,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({}),
+
 				},
 			);
 
