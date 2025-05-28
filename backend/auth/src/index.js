@@ -11,10 +11,8 @@ import { Logger } from './logger.js';
 
 dotenv.config()
 
-// Initialize our custom logger
 const logger = new Logger({ serviceName: 'auth' });
 
-// Use built-in Fastify logger for HTTP requests
 const fastify = Fastify({ logger: true })
 await fastify.register(cors)
 await fastify.register(jwt, {
@@ -152,7 +150,7 @@ fastify.get('/google/callback', async (req, reply) => {
   });
   const localToken = fastify.jwt.sign({ uuid: user.uuid, email: user.email })
   //reply.send({ token: localToken })
-	reply.redirect(`http://localhost:5173/?code=${localToken}`)
+	reply.redirect(`https://transcendance.com?code=${localToken}`)
 })
 
 fastify.put('/update', async (request, reply) => {
