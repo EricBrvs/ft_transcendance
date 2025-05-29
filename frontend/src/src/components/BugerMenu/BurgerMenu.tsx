@@ -6,11 +6,13 @@ import { useTranslation } from "../../context/TranslationContext";
 import { useSettings } from "../../context/SettingsContext";
 import { getSizeTextStyle } from "../../globalStyle";
 import type { BurgerMenuProps } from "../../types/BurgerMenuProps";
+import { useLogout } from "../../hooks/useLogout";
 
 const BurgerMenu: React.FC<BurgerMenuProps> = ({ isOpen, onClose }) => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const { t } = useTranslation();
+	const handleLogout = useLogout();
 	const [isAddFriendModalOpen, setIsAddFriendModalOpen] = useState(false);
 
 	const isActive = (path: string) => {
@@ -465,10 +467,12 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ isOpen, onClose }) => {
 						</Link>
 					</li>
 					<li className="relative">
-						<Link
-							to="/logout"
+						<button
 							className={`${BugerMenuStyles.logoutButton}  ${getSizeTextStyle(size_text)}`}
-							onClick={onClose}
+							onClick={() => {
+								handleLogout();
+								onClose();
+							}}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -503,7 +507,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ isOpen, onClose }) => {
 								/>
 							</svg>
 							<span>{t("menu.logout")}</span>
-						</Link>
+						</button>
 					</li>
 				</ul>
 			</nav>
