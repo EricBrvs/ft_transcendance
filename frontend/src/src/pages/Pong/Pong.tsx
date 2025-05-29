@@ -24,6 +24,7 @@ import { useTournament } from "../../context/TournamentContext";
 
 const SCALE_FACTOR = 10;
 let BALL_SPEED_INCREASE = 1.05;
+let PADDLE_SPEED_FACTOR = 1.0;
 const MAX_SCORE = 10;
 const PADDLE_WIDTH = 0.3;
 const FIELD_MARGIN = 0.05;
@@ -398,7 +399,7 @@ export default function Pong() {
 		if (!paddleLeftRef.current || !paddleRightRef.current || editViewMode)
 			return;
 
-		const paddleSpeed = gameFieldRef.current.height * 0.01;
+		const paddleSpeed = gameFieldRef.current.height * 0.01 * PADDLE_SPEED_FACTOR;
 		const paddleLimit = gameFieldRef.current.height * 0.44;
 
 		if (keysPressed.current["w"] || keysPressed.current["W"]) {
@@ -843,12 +844,15 @@ export default function Pong() {
 		switch (speed) {
 			case "fast":
 				speedFactor = 2.5;
+				PADDLE_SPEED_FACTOR = 1.5;
 				break;
 			case "turbo":
 				speedFactor = 4;
+				PADDLE_SPEED_FACTOR = 2.0;
 				break;
 			default:
 				speedFactor = 1;
+				PADDLE_SPEED_FACTOR = 1.0;
 		}
 		if (ballDirectionRef.current) {
 			const currentSpeed = Math.sqrt(
@@ -1067,7 +1071,7 @@ export default function Pong() {
 
 	const handleLeftPaddleUp = useCallback(() => {
 		if (paddleLeftRef.current && !editViewMode) {
-			const paddleSpeed = gameFieldRef.current.height * 0.01;
+			const paddleSpeed = gameFieldRef.current.height * 0.01 * PADDLE_SPEED_FACTOR;
 			const paddleLimit = gameFieldRef.current.height * 0.45;
 
 			paddleLeftRef.current.position.z -= paddleSpeed;
@@ -1081,7 +1085,7 @@ export default function Pong() {
 
 	const handleLeftPaddleDown = useCallback(() => {
 		if (paddleLeftRef.current && !editViewMode) {
-			const paddleSpeed = gameFieldRef.current.height * 0.01;
+			const paddleSpeed = gameFieldRef.current.height * 0.01 * PADDLE_SPEED_FACTOR;
 			const paddleLimit = gameFieldRef.current.height * 0.45;
 
 			paddleLeftRef.current.position.z += paddleSpeed;
@@ -1095,7 +1099,7 @@ export default function Pong() {
 
 	const handleRightPaddleUp = useCallback(() => {
 		if (paddleRightRef.current && !editViewMode) {
-			const paddleSpeed = gameFieldRef.current.height * 0.01;
+			const paddleSpeed = gameFieldRef.current.height * 0.01 * PADDLE_SPEED_FACTOR;
 			const paddleLimit = gameFieldRef.current.height * 0.45;
 
 			paddleRightRef.current.position.z -= paddleSpeed;
@@ -1109,7 +1113,7 @@ export default function Pong() {
 
 	const handleRightPaddleDown = useCallback(() => {
 		if (paddleRightRef.current && !editViewMode) {
-			const paddleSpeed = gameFieldRef.current.height * 0.01;
+			const paddleSpeed = gameFieldRef.current.height * 0.01 * PADDLE_SPEED_FACTOR;
 			const paddleLimit = gameFieldRef.current.height * 0.45;
 
 			paddleRightRef.current.position.z += paddleSpeed;
