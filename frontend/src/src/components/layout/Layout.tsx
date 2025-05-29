@@ -32,7 +32,7 @@ const Layout: React.FC = () => {
 						<p
 							className={`${globalStyle.span} ${getSizeTextStyle(size_text)} text-center`}
 						>
-							ft_transcendence | ©2025 | aauberti | ebervas | jlorette |
+							ft_transcendence | ©2025 | aauberti | ebervas | jlorette | mrouves |
 							thomarna{" "}
 						</p>
 					</footer>
