@@ -28,8 +28,8 @@ await db.exec(`
 const fastify = Fastify({
   logger: true,
   https: {
-    key: fs.readFileSync(path.join(__dirname, '../certs/key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, '../certs/cert.pem'))
+    key: fs.readFileSync(path.join(__dirname, '../certs/shared.key')),
+    cert: fs.readFileSync(path.join(__dirname, '../certs/shared.crt'))
   }
 });
 await fastify.register(cors, {

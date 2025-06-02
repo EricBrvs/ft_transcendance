@@ -9,6 +9,8 @@ services:
       - auth
       - user
       - game
+    volumes:
+      - ./certs/shared:/app/certs
     restart: always
   auth:
     container_name: auth
@@ -40,7 +42,7 @@ services:
     image: frontend
     build: ./frontend
     volumes:
-      - ./certs-generated/frontend:/etc/nginx/certs:ro
+      - ./certs/shared:/etc/nginx/certs:ro
       - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "443:443"
@@ -71,8 +73,6 @@ services:
       - elasticsearch
     networks:
       - ELK
-
-# Service setup_kibana supprimé car il n'est plus nécessaire avec la configuration statique de Kibana
 
   kibana:
     container_name: kibana
