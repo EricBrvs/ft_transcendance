@@ -1,5 +1,4 @@
 export type ProfilHomeCardProps = {
-	home?: boolean;
 	friendProfile?: {
 		uuid: string;
 		email: string;

@@ -6,7 +6,6 @@ import { useUserContext } from "../../../context/UserContext";
 import type { ProfilHomeCardProps } from "../../../types/ProfilHomeCardProps";
 
 const ProfilHomeCard: React.FC<ProfilHomeCardProps> = ({
-	home = false,
 	friendProfile,
 }) => {
 	const { t } = useTranslation();
@@ -47,16 +46,7 @@ const ProfilHomeCard: React.FC<ProfilHomeCardProps> = ({
 					<span className={globalStyle.span}>Non connecté</span>
 				</>
 			)}
-			{home && user && !isFriendProfile && (
-				<>
-					<div className={globalStyle.separator}></div>
-					<div className={globalStyle.row}>
-						<p>{t("home.lastGame")}</p>
-						<Space />
-						<span className={globalStyle.spanAlert}>{t("home.lose")}</span>
-					</div>
-				</>
-			)}
+
 		</Card>
 	);
 };

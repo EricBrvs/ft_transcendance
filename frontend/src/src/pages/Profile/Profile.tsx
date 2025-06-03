@@ -5,7 +5,7 @@ import globalStyle from "../../globalStyle";
 export default function Profile() {
 	return (
 		<div className={globalStyle.cardContainer}>
-			<ProfilHomeCard home={true} />
+			<ProfilHomeCard />
 			<ResultsCard />
 		</div>
 	);
