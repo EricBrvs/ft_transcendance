@@ -139,7 +139,7 @@ export default function ProfileFriend() {
 
 	return (
 		<div className={globalStyle.cardContainer}>
-			<ProfilHomeCard home={false} friendProfile={friendProfile} />
+			<ProfilHomeCard friendProfile={friendProfile} />
 
 			<Card>
 				<div className={globalStyle.row}>

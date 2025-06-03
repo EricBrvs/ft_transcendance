@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 				</div>
 			</Card>
 			<div className={globalStyle.cardContainer}>
-				<ProfilHomeCard home={true} />
+				<ProfilHomeCard />
 				<NewGameCard ai={true} />
 				<ResultsCard />
 				<NewGameCard ai={false} />
