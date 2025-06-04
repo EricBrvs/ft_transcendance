@@ -1,20 +1,12 @@
 server.name: kibana
 server.host: "0.0.0.0"
 
-# HTTPS connection to Elasticsearch
 elasticsearch.hosts: ["https://elasticsearch:9200"]
-elasticsearch.ssl.verificationMode: certificate
-elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca/ca.crt"]
-
-# Authentication
 elasticsearch.username: "kibana_system"
-# Password provided via environment variable in docker-compose.yml
-
-# Enable SSL for Kibana
 server.ssl.enabled: true
 server.ssl.certificate: "/usr/share/kibana/config/certs/instance/instance.crt"
 server.ssl.key: "/usr/share/kibana/config/certs/instance/instance.key"
-
-# Disable certain features to reduce load
+elasticsearch.ssl.verificationMode: certificate
+elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca/ca.crt"]
 xpack.observabilityAIAssistant.enabled: false
 telemetry.enabled: false
