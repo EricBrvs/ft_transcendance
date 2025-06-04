@@ -150,7 +150,7 @@ fastify.get('/google/callback', async (req, reply) => {
   });
   const localToken = fastify.jwt.sign({ uuid: user.uuid, email: user.email })
   //reply.send({ token: localToken })
-	reply.redirect(`https://transcendance.com?code=${localToken}`)
+	reply.redirect(`https://transcendence.com?code=${localToken}`)
 })
 
 fastify.put('/update', async (request, reply) => {

@@ -12,8 +12,8 @@ up: check_env
 	@./elk.sh start
 	@$(DOCKER_COMPOSE) up -d gateway auth user game frontend
 	@echo "$(GREEN)Tous les services ont démarré avec succès!$(NC)"
-	@echo "$(GREEN)Gateway: http://localhost:9443$(NC)"
-	@echo "$(GREEN)Frontend: http://localhost:443$(NC)"
+	@echo "$(GREEN)Gateway: https://transcendance.com:9443$(NC)"
+	@echo "$(GREEN)Frontend: https://localhost:443$(NC)"
 	@echo "$(GREEN)Elasticsearch: https://localhost:9200$(NC)"
 	@echo "$(GREEN)Kibana: https://localhost:5601$(NC)"
 
