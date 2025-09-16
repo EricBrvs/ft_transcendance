@@ -1,4 +1,18 @@
-# ft_transcendance
+# 🏓 Transcendence – École 42
+
+Le projet **Transcendence** est le dernier projet du tronc commun de l’École 42.  
+Il consiste à développer une **application web complète et sécurisée** autour du jeu Pong, en intégrant :
+
+- 🎨 **Frontend** : interface utilisateur moderne et interactive  
+- ⚙️ **Backend** : API et logique métier robustes  
+- 🗄️ **Base de données** : persistance et gestion des données  
+- 💬 **Fonctionnalités sociales** : authentification, chat en temps réel, gestion des amis, organisation de matchs  
+- ☁️ **Déploiement** : conteneurisation avec Docker, reverse proxy, CI/CD, hébergement sur un environnement cloud  
+
+Ce projet permet de mettre en pratique l’ensemble des compétences acquises à 42 :  
+**programmation, travail en équipe, sécurité, architecture logicielle et déploiement distribué**.  
+
+---
 
 ## Configuration de l'ELK Stack
 
