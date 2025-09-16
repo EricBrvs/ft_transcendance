@@ -7,7 +7,7 @@ Il consiste à développer une **application web complète et sécurisée** auto
 - ⚙️ **Backend** : API et logique métier robustes  
 - 🗄️ **Base de données** : persistance et gestion des données  
 - 💬 **Fonctionnalités sociales** : authentification, chat en temps réel, gestion des amis, organisation de matchs  
-- ☁️ **Déploiement** : conteneurisation avec Docker, reverse proxy, CI/CD, hébergement sur un environnement cloud  
+- ☁️ **Déploiement** : conteneurisation avec Docker, reverse proxy.
 
 Ce projet permet de mettre en pratique l’ensemble des compétences acquises à 42 :  
 **programmation, travail en équipe, sécurité, architecture logicielle et déploiement distribué**.  
